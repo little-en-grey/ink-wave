@@ -14,10 +14,9 @@
         <div class="image-generator">
             <div class="content">
                 <div class="row">
-                
                     <!-- ページタイトル -->
                     <div class="col-12">
-                        <h1>INK WAVE Profile Generator</h1>
+                        <h1>INK WAVE Profile Maker</h1>
                     </div>
 
                     <!-- 名前 -->
@@ -96,51 +95,24 @@
                     <!-- Range -->
                     <div class="col-12 col-sm-6 mb-3">
                         <label for="select-range" class="form-label">Range</label>
-                        <div class="form-check">
-                            <div class="form-check">
-                                <input v-model="selectRange" class="form-check-input" type="checkbox" id="range1" value="1">
-                                <label class="form-check-label" for="range1">SHORT</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRange" class="form-check-input" type="checkbox" id="range2" value="2">
-                                <label class="form-check-label" for="range2">MIDDLE</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRange" class="form-check-input" type="checkbox" id="range3" value="3">
-                                <label class="form-check-label" for="range3">LONG</label>
-                            </div>
-                        </div>
+                        <select v-model="selectRange" id="select-range" class="form-select" name="range">
+                            <option value="1">SHORT</option>
+                            <option value="2">MIDDLE</option>
+                            <option value="3">LONG</option>
+                        </select>
                     </div>
 
                     <!-- 役割 -->
                     <div class="col-12 col-sm-6 mb-3">
                         <label for="select-role" class="form-label">Role</label>
-                        <div class="form-check">
-                            <div class="form-check">
-                                <input v-model="selectRole" class="form-check-input" type="checkbox" id="role1" value="1">
-                                <label class="form-check-label" for="role1">ATTACKER</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRole" class="form-check-input" type="checkbox" id="role2" value="2">
-                                <label class="form-check-label" for="role2">SUPPORTER</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRole" class="form-check-input" type="checkbox" id="role3" value="3">
-                                <label class="form-check-label" for="role3">CONTROLLER</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRole" class="form-check-input" type="checkbox" id="role4" value="4">
-                                <label class="form-check-label" for="role4">TANKER</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRole" class="form-check-input" type="checkbox" id="role5" value="5">
-                                <label class="form-check-label" for="role5">MEGAPHONE RUNNER</label>
-                            </div>
-                            <div class="form-check">
-                                <input v-model="selectRole" class="form-check-input" type="checkbox" id="role6" value="6">
-                                <label class="form-check-label" for="role6">BALANCER</label>
-                            </div>
-                        </div>
+                        <select v-model="selectRole" id="select-role" class="form-select" name="role">
+                            <option value="1">ATTACKER</option>
+                            <option value="2">SUPPORTER</option>
+                            <option value="3">CONTROLLER</option>
+                            <option value="4">TANKER</option>
+                            <option value="5">MEGAPHONE RUNNER</option>
+                            <option value="6">BALANCER</option>
+                        </select>
                     </div>
 
                     <!-- 参加曜日 -->
@@ -188,7 +160,7 @@
                 // 入力項目
                 inputName: '',          // 名前
                 inputAge: '',           // 年齢
-                selectGender: '0',        // 性別
+                selectGender: '0',      // 性別
                 selectVoiceChat: [],    // VC
                 inputXpArea: '',        // XP（エリア）
                 inputXpYagura: '',      // XP（ヤグラ）
@@ -222,6 +194,10 @@
                     context.fillStyle = 'white';
                     context.font = '30px Arial';
 
+                    // 円描画用
+                    context.strokeStyle = "white" ;
+                    context.lineWidth = 5 ;
+
                     // 入力された内容は指定の位置に配置
                     context.fillText(this.inputName, 100, 375);
                     context.fillText(this.inputAge, 100, 535);
@@ -230,11 +206,93 @@
                     context.fillText(this.inputXpHoko, 480, 740);
                     context.fillText(this.inputXpAsari, 670, 740);
                     context.fillText(this.inputXpFes, 860, 740);
-                    context.fillText(this.inputWeapon, 50, 200);
-                    context.fillText(this.inputMemo, 50, 200);
+                    // 20文字で改行
+                    // context.fillText(this.inputWeapon, 100, 875);
+
+                    context.font = '26px Arial';
+                    context.fillText(this.inputMemo, 100, 1620);
+
+                    // Gender描画
+                    var genderX, genderY = 510;
+                    context.beginPath();
+                    switch(this.selectGender) {
+                        case '0':
+                            genderX = 400;
+                            break;
+                        case '1':
+                            genderX = 305;
+                            break;
+                        case '2':
+                            genderX = 485;
+                            break;
+                    }
+                    context.arc(genderX, genderY, 40, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+                    context.stroke();
+
+                    // VC描画
+                    var vcX = {"0": 944,"1": 630, "2": 732, "3": 833}, vcY = 514;
+                    this.selectVoiceChat.forEach(item => {
+                        if (vcX[item] !== undefined) {
+                            context.beginPath();
+                            context.arc(vcX[item], vcY, 40, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+                            context.stroke();
+                        }
+                    });
+
+                    // Range描画
+                    var rangeX = 853, rangeY;
+                    context.beginPath();
+                    switch(this.selectRange) {
+                        case '1':
+                            rangeY = 875;
+                            break;
+                        case '2':
+                            rangeY = 949;
+                            break;
+                        case '3':
+                            rangeY = 1027;
+                            break;
+                    }
+                    context.ellipse(rangeX, rangeY, 80, 25, 0, 0, 2 * Math.PI, false);
+                    context.stroke();
+
+                    // Role描画
+                    var roleX, roleY = 1200;
+                    context.beginPath();
+                    switch(this.selectRole) {
+                        case '1':
+                            roleX = 153;
+                            break;
+                        case '2':
+                            roleX = 308;
+                            break;
+                        case '3':
+                            roleX = 461;
+                            break;
+                        case '4':
+                            roleX = 617;
+                            break;
+                        case '5':
+                            roleX = 771;
+                            break;
+                        case '6':
+                            roleX = 927;
+                            break;
+                    }
+                    context.arc(roleX, roleY, 60, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+                    context.stroke();
+
+                    // League Date描画
+                    var dateX = {"1": 254, "2": 541, "3": 826}, dateY = 1420;
+                    this.selectLeagueDate.forEach(item => {
+                        if (dateX[item] !== undefined) {
+                            context.beginPath();
+                            context.ellipse(dateX[item], dateY, 80, 25, 0, 0, 2 * Math.PI, false);
+                            context.stroke();
+                        }
+                    });
 
                     // Update image data URL
-                    canvas.crossOrigin = "anonymous"; 
                     this.imageDataURL = canvas.toDataURL();
                 };
             }
