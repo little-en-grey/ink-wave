@@ -6,7 +6,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>INK WAVE Profile Generator</title>
+    <title>INK WAVE Profile Maker</title>
 </head>
 
 <body>
@@ -26,13 +26,13 @@
                     </div>
 
                     <!-- 年齢 -->
-                    <div class="col-12 col-md-2 mb-3">
+                    <div class="col-12 col-md-2 col-sm-6 mb-3">
                         <label for="input-age" class="form-label">Age</label>
                         <input type="text" v-model="inputAge" id="input-age" class="form-control" name="age" maxlength="2" />
                     </div>
 
                     <!-- 性別 -->
-                    <div class="col-12 col-md-4 mb-3">
+                    <div class="col-12 col-md-2 col-sm-6 mb-3">
                         <label for="select-gender" class="form-label">Gender</label>
                         <select v-model="selectGender" id="select-gender" class="form-select" name="gender">
                             <option value="0" selected>非公開</option>
@@ -42,7 +42,7 @@
                     </div>
 
                     <!-- ボイスチャット -->
-                    <div class="col-12 mb-3">
+                    <div class="col-12 col-md-8 mb-3">
                         <label for="select-vc" class="form-label">VC</label>
                         <div class="form-check">
                             <div class="form-check-inline">
@@ -66,30 +66,30 @@
 
                     <!-- XP -->
                     <div class="col-12 col-sm-6 mb-3">
-                        <label for="input-area" class="form-label">エリア</label>
+                        <label for="input-area" class="form-label">エリア(6文字まで)</label>
                         <input type="text" v-model="inputXpArea" id="input-area" class="form-control"  name="area" maxlength="6" />
                     </div>
                     <div class="col-12 col-sm-6 mb-3">
-                        <label for="input-yagura" class="form-label">ヤグラ</label>
+                        <label for="input-yagura" class="form-label">ヤグラ(6文字まで)</label>
                         <input type="text" v-model="inputXpYagura" id="input-yagura" class="form-control" name="yagura" value="" maxlength="6" />
                     </div>
                     <div class="col-12 col-sm-6 mb-3">
-                        <label for="input-hoko" class="form-label">ホコ</label>
+                        <label for="input-hoko" class="form-label">ホコ(6文字まで)</label>
                         <input type="text" v-model="inputXpHoko" id="input-hoko" class="form-control" name="hoko" value="" maxlength="6" />
                     </div>
                     <div class="col-12 col-sm-6 mb-3">
-                        <label for="input-asari" class="form-label">アサリ</label>
+                        <label for="input-asari" class="form-label">アサリ(6文字まで)</label>
                         <input type="text" v-model="inputXpAsari" id="input-asari" class="form-control" name="asari" maxlength="6" />
                     </div>
                     <div class="col-12 col-sm-6 mb-3">
-                        <label for="input-fes" class="form-label">ナワバリ</label>
+                        <label for="input-fes" class="form-label">ナワバリ(6文字まで)</label>
                         <input type="text" v-model="inputXpFes" id="input-fes" class="form-control" name="fes" maxlength="6" />
                     </div>
 
                     <!-- ブキ -->
                     <div class="col-12 mb-3">
-                        <label for="input-weapon" class="form-label">Weapon</label>
-                        <textarea type="text" v-model="inputWeapon" id="input-weapon" class="form-control" name="weapon"></textarea>
+                        <label for="input-weapon" class="form-label">Weapon(改行不可/85文字まで)</label>
+                        <textarea type="text" v-model="inputWeapon" id="input-weapon" class="form-control" name="weapon" maxlength="85"></textarea>
                     </div>
 
                     <!-- Range -->
@@ -136,8 +136,8 @@
 
                     <!-- メモ -->
                     <div class="col-12 mb-3">
-                        <label for="input-memo" class="form-label">Memo</label>
-                        <textarea type="text" v-model="inputMemo" id="input-memo" class="form-control" name="memo"></textarea>
+                        <label for="input-memo" class="form-label">Memo(改行不可/272文字まで)</label>
+                        <textarea type="text" v-model="inputMemo" id="input-memo" class="form-control" name="memo" maxlength="272"></textarea>
                     </div>
 
                     <div class="col-12 mb-3 d-grid gap-2">
@@ -206,11 +206,21 @@
                     context.fillText(this.inputXpHoko, 480, 740);
                     context.fillText(this.inputXpAsari, 670, 740);
                     context.fillText(this.inputXpFes, 860, 740);
-                    // 20文字で改行
-                    // context.fillText(this.inputWeapon, 100, 875);
+
+                    var weaponLines = this.inputWeapon.replace(/\n/g, '　').match(/.{1,17}/g) || [];
+                    var lineHeight = 40;
+                    
+                    for (let i = 0; i < (weaponLines.length > 5 ? 5 : weaponLines.length); i++) {
+                        context.fillText(weaponLines[i], 100, 882 + i * lineHeight);
+                    }
 
                     context.font = '26px Arial';
-                    context.fillText(this.inputMemo, 100, 1620);
+                    var memoLines = this.inputMemo.replace(/\n/g, '　').match(/.{1,34}/g) || [];
+                    var lineHeight = 35;
+                    
+                    for (let i = 0; i < (memoLines.length > 8 ? 8 : memoLines.length); i++) {
+                        context.fillText(memoLines[i], 100, 1587 + i * lineHeight);
+                    }
 
                     // Gender描画
                     var genderX, genderY = 510;
@@ -295,6 +305,26 @@
                     // Update image data URL
                     this.imageDataURL = canvas.toDataURL();
                 };
+            },
+            breakTextIntoLines(text, maxLineLength) {
+                const lines = [];
+                let currentLine = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    currentLine += text[i];
+                    
+                    if ((currentLine.length >= maxLineLength || text[i] === '\n')&&currentLine.length!=maxLineLength) {
+                        if(currentLine.length!=maxLineLength)
+                        lines.push(currentLine.trim()); // 空白を削除
+                        currentLine = '';
+                    }
+                }
+
+                if (currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                }
+                
+                return lines;
             }
         },
         // デバッグ用…
