@@ -149,7 +149,7 @@ export default {
 
             imageDataURL: null,
             imageName: 'generated_image.png',
-            baseImageUrl: '/card.png', // ベース画像のURLを設定
+            baseImageUrl: '/ink-wave/card.png', // ベース画像のURLを設定
             canvasWidth: 1080, // キャンバスの幅
             canvasHeight: 1920, // キャンバスの高さ
         };
