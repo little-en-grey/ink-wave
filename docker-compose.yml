@@ -1,0 +1,13 @@
+version: '3'
+services:
+  web_app:
+    container_name: ink-wave
+    build: docker/
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - '3939:3939'
+    tty: true
