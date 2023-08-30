@@ -178,15 +178,25 @@ export default {
                 context.lineWidth = 5;
 
                 // 入力された内容は指定の位置に配置
-                const x = (174 + 61 - context.measureText( this.inputAge ).width) / 2 + 61 / 2;
+                let left = 61;
+                let x = (174 + left - context.measureText( this.inputAge ).width) / 2 + left / 2;
                 context.fillText(this.inputAge, x, 529);
 
                 context.font = '30px ＭＳ ゴシック';
-                context.fillText(this.inputXpArea, 123, 740);
-                context.fillText(this.inputXpYagura, 313, 740);
-                context.fillText(this.inputXpHoko, 502, 740);
-                context.fillText(this.inputXpAsari, 696, 740);
-                context.fillText(this.inputXpFes, 887, 740);
+                x = (191 + left - context.measureText( this.inputXpArea ).width) / 2 + left / 2;
+                context.fillText(this.inputXpArea, x, 740);
+                left += 191 + 2;
+                x = (189 + left - context.measureText( this.inputXpYagura ).width) / 2 + left / 2;
+                context.fillText(this.inputXpYagura, x, 740);
+                left += 189 + 2;
+                x = (189 + left - context.measureText( this.inputXpHoko ).width) / 2 + left / 2;
+                context.fillText(this.inputXpHoko, x, 740);
+                left += 189 + 2;
+                x = (189 + left - context.measureText( this.inputXpAsari ).width) / 2 + left / 2;
+                context.fillText(this.inputXpAsari, x, 740);
+                left += 189 + 2;
+                x = (191 + left - context.measureText( this.inputXpFes ).width) / 2 + left / 2;
+                context.fillText(this.inputXpFes, x, 740);
 
                 context.font = '42px ＭＳ ゴシック';
                 context.fillText(this.inputName, 100, 381);
