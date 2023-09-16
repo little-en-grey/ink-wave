@@ -160,9 +160,6 @@ export default {
             if (!canvas || !canvas.getContext) return false;
             const context = canvas.getContext('2d');
 
-            this.width = this.canvasWidth;
-            this.height = this.canvasHeight;
-
             // Draw base image
             const baseImage = new Image();
             baseImage.src = this.baseImageUrl;
