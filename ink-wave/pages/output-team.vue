@@ -267,8 +267,8 @@ export default {
                 }
 
                 // TEAM
-                ctx1.font = "bold 36px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputTeamName, 512, 116);
+                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
+                ctx1.fillText(this.inputTeamName, 512, 123);
 
                 // MEMBER
                 ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
@@ -376,8 +376,8 @@ export default {
                 ctx1.fillStyle = 'white';
 
                 // TEAM
-                ctx1.font = "bold 36px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputTeamName, 732, 270);
+                ctx1.font = "bold 60px 'Noto Sans JP', sans-serif";
+                ctx1.fillText(this.inputTeamName, 732, 280);
 
                 // MEMBER
                 ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
