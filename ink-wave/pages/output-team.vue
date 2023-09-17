@@ -8,6 +8,13 @@
                 </v-card-title>
                 <v-card-text>
                     <v-row justify="start">
+                        <v-col cols="9">
+                            <v-text-field v-model="inputEntryLine" label="Entry Line"
+                                hint="申請リストから行コピーして貼り付けしてください"></v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-btn color="primary" @click="inputData"> 申請データを取り込む </v-btn>
+                        </v-col>
                         <!-- チーム名 -->
                         <v-col cols="12">
                             <v-text-field v-model="inputTeamName" label="Team Name"></v-text-field>
@@ -22,16 +29,20 @@
                                     </div>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-text-field v-model="inputPlayerName[i - 1]" maxlength="10" label="Name"></v-text-field>
+                                    <v-text-field v-model="inputPlayerName[i - 1]" maxlength="10"
+                                        label="Name"></v-text-field>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-select v-model="selectPlayerWeapons[i - 1]" :items="allWeaponsData" item-text="name" item-value="id" density="compact" chips multiple label="Weapons"></v-select>
+                                    <v-select v-model="selectPlayerWeapons[i - 1]" :items="allWeaponsData" item-text="name"
+                                        item-value="id" density="compact" chips multiple label="Weapons"></v-select>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-select v-model="selectRange[i - 1]" :items="rangeData" item-text="name" item-value="id" density="compact" label="Range"></v-select>
+                                    <v-select v-model="selectRange[i - 1]" :items="rangeData" item-text="name"
+                                        item-value="id" density="compact" label="Range"></v-select>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-select v-model="selectRole[i - 1]" :items="roleData" item-text="name" item-value="tag" density="compact" label="Role"></v-select>
+                                    <v-select v-model="selectRole[i - 1]" :items="roleData" item-text="name"
+                                        item-value="tag" density="compact" label="Role"></v-select>
                                 </v-col>
                             </v-row>
                         </v-col>
@@ -41,7 +52,8 @@
                             <v-file-input v-model="logoImage" label="Logo Image" :disabled="defaultLogo"></v-file-input>
                         </v-col>
                         <v-col cols="3">
-                            <v-select v-model="defaultLogo" :items="logoData" item-text="name" item-value="id" density="compact" label="Default Logo" :disabled="logoImage"></v-select>
+                            <v-select v-model="defaultLogo" :items="logoData" item-text="name" item-value="id"
+                                density="compact" label="Default Logo" :disabled="logoImage"></v-select>
                         </v-col>
                         <v-col cols="1">
                             <v-img v-if="defaultLogo" :src="selectLogo" max-height="50" max-width="50"></v-img>
@@ -54,10 +66,12 @@
 
                         <!-- メモ -->
                         <v-col cols="12">
-                            <v-textarea label="Comment" v-model="inputComment" hint="145文字まで(29文字ごとに自動で改行されます)" maxlength="145"></v-textarea>
+                            <v-textarea label="Comment" v-model="inputComment" hint="145文字まで(29文字ごとに自動で改行されます)"
+                                maxlength="145"></v-textarea>
                         </v-col>
                         <v-col v-for="i in 6" :key="i" cols="2">
-                            <v-text-field :label="'Label Name' + i" v-model="labels[i - 1]" @change="fillData"></v-text-field>
+                            <v-text-field :label="'Label Name' + i" v-model="labels[i - 1]"
+                                @change="fillData"></v-text-field>
                         </v-col>
 
                         <!-- レーダーチャート -->
@@ -126,6 +140,7 @@ export default {
             inputTeamName: "",
             inputComment: "",
             inputAchievements: [],
+            inputEntryLine: "",
 
             logoImage: null,
             defaultLogo: null,
@@ -187,7 +202,7 @@ export default {
             return {
                 width: `580px`,
                 height: `580px`,
-                position:'relative'
+                position: 'relative'
             }
         }
     },
@@ -261,7 +276,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if(this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
                     }
                 }
@@ -368,7 +383,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if(this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
                     }
                 }
@@ -408,6 +423,85 @@ export default {
             }
             this.imageDataURL = canvas.toDataURL();
         },
+        inputData() {
+            let splitData = [];
+            if (this.inputEntryLine) {
+                splitData = this.inputEntryLine.split('\t');
+
+                this.inputPlayerName = []
+                // this.selectPlayerWeapons = []
+                this.selectRange = []
+                this.selectRole = []
+
+                if (splitData.length > 31) {
+                    this.inputTeamName = splitData[1]
+                    this.inputPlayerName.push(splitData[5], splitData[11], splitData[16], splitData[21])
+                    // this.selectPlayerWeapons
+                    this.selectRange.push(this.getRange(splitData[9]), this.getRange(splitData[14]), this.getRange(splitData[19]), this.getRange(splitData[24]))
+                    this.selectRole.push(this.getRole(splitData[10]), this.getRole(splitData[15]), this.getRole(splitData[20]), this.getRole(splitData[25]))
+
+                    // スーパーサブの追加
+                    if (splitData[26] === 'はい') {
+                        this.inputPlayerName.push(splitData[27])
+                        // this.selectPlayerWeapons
+                        this.selectRange.push(this.getRange(splitData[30]))
+                        this.selectRole.push(this.getRole(splitData[31]))
+                    }
+
+                    if (splitData[3] !== "") {
+                        // this.logoImage = splitData[3]
+                    } else {
+                        this.defaultLogo = this.getDefaultLog(splitData[4])
+                    }
+                }
+            }
+
+
+        },
+        getRange(range) {
+            switch (range) {
+                case 'SHORT':
+                    return 1
+                case 'MIDDLE':
+                    return 2
+                case 'LONG':
+                    return 3
+                default:
+                    return null
+            }
+        },
+        getRole(role) {
+            switch (role) {
+                case 'アタッカー':
+                    return 'attack'
+                case 'サポーター':
+                    return 'support'
+                case 'コントローラー':
+                    return 'control'
+                case 'タンカー':
+                    return 'tank'
+                case 'メガホンランナー':
+                    return 'runner'
+                case 'バランサー':
+                    return 'balance'
+                default:
+                    return null
+            }
+        },
+        getDefaultLog(logo) {
+            switch (logo) {
+                case 'ブルー':
+                    return 1
+                case 'レッド':
+                    return 2
+                case 'グリーン':
+                    return 3
+                case 'オレンジ':
+                    return 4
+                default:
+                    return null
+            }
+        }
     },
 }
 </script>
@@ -421,6 +515,4 @@ export default {
 .chart-container {
     margin: 0 auto;
 }
-
-
 </style>
