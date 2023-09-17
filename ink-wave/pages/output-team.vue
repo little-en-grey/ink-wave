@@ -278,7 +278,6 @@ export default {
 
                 // RANGE
                 const self = this;
-                ctx1.font = "28px 'Noto Sans JP', sans-serif";
                 this.selectRange.forEach(function (rangeId, index) {
                     const range = self.rangeData.find(item => item.id === rangeId);
                     const left = 398;
@@ -337,10 +336,10 @@ export default {
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
 
                 // チームロゴ
-                const maxWidth = 450;
-                const maxHeight = 450;
-                const landing = 159;
-                const top = 313;
+                const maxWidth = 585;
+                const maxHeight = 585;
+                const landing = 50;
+                const top = 272;
                 const logo = new Image();
                 if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
                     if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
@@ -388,7 +387,6 @@ export default {
 
                 // RANGE
                 const self = this;
-                ctx1.font = "28px 'Noto Sans JP', sans-serif";
                 this.selectRange.forEach(function (rangeId, index) {
                     const range = self.rangeData.find(item => item.id === rangeId);
                     const left = 1034;
