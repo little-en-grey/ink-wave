@@ -4,7 +4,7 @@
             <!-- <v-col cols="12" sm="8"> -->
             <v-card class="mb-3">
                 <v-card-title class="headline">
-                    チーム紹介カード
+                    Todays Result
                 </v-card-title>
                 <v-card-text>
                     <v-row justify="start">
@@ -254,7 +254,7 @@ export default {
                 }
 
                 const landingB = 1192;
-                if ((this.logoImageB && this.logoImageB.type && this.logoImageB.type.match('image/')) || this.defaultLogoA) {
+                if ((this.logoImageB && this.logoImageB.type && this.logoImageB.type.match('image/')) || this.defaultLogoB) {
                     if (this.logoImageB && this.logoImageB.type && this.logoImageB.type.match('image/')) {
                         logoB.src = URL.createObjectURL(this.logoImageB); // ファイルからURLを生成
                     } else {
