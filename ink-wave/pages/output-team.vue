@@ -173,22 +173,22 @@ export default {
 
     data() {
         return {
-            inputPlayerName: ["ぷれいやー１","ぷれいやー２","ぷれいやー３","ぷれいやー４","ぷれいやー５"],
-            selectPlayerWeapons: {"0":["Shooter_Gravity_00.png","Shooter_Heavy_00.png","Shooter_Heavy_01.png"],"1":["Charger_Light_00.png","Charger_LongScope_00.png","Shooter_TripleMiddle_00.png"],"2":["Shooter_TripleMiddle_01.png","Shooter_TripleQuick_00.png","Shooter_TripleQuick_01.png"],"3":["Shooter_First_01.png","Shooter_First_00.png","Spinner_HyperShort_00.png"],"4":["Blaster_LightLong_01.png","Blaster_Precision_00.png","Roller_Normal_00.png"]},
-            selectRange: [1,2,3,2,1],
-            selectRole: ["attack","support","control","tank","runner"],
-            inputTeamName: "テーブルパンチ",
+            inputPlayerName: [],
+            selectPlayerWeapons: {},
+            selectRange: [],
+            selectRole: [],
+            inputTeamName: "",
             inputComment: "",
             inputAchievements: [],
             inputEntryLine: "",
 
-            inputFinalWP: "2500.1",
-            inputBestWP: "3000.0",
-            inputSeason: "1",
+            inputFinalWP: "",
+            inputBestWP: "",
+            inputSeason: "",
 
             logoImage: null,
-            defaultLogo: 1,
-            rankIcon: 4,
+            defaultLogo: null,
+            rankIcon: null,
 
             imageDataURL: null,
             imageName: 'generated_image.png',
