@@ -100,7 +100,7 @@
                     <v-btn color="primary" @click="generateImage"> スライド作成 </v-btn>
                 </v-card-actions>
             </v-card>
-            <v-card class="pt-1 pr-1 pl-1">
+            <v-card v-show="imageDataURL" class="pt-1 pr-1 pl-1">
                 <canvas ref="imageCanvas" class="confirm-image" :width="canvasWidth" :height="canvasHeight">
                 </canvas>
                 <v-card-actions>
@@ -116,6 +116,7 @@
 <script>
 export default {
     name: 'TodaysResult',
+    layout: 'operation',
     head: {
         title: 'Todays Result',
     },
