@@ -22,14 +22,16 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico' },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap",
         crossorigin: "",
       },
     ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: [
+    { src: '~assets/css/font.css' }
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],

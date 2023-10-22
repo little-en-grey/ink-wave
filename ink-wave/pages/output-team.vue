@@ -75,13 +75,18 @@
                         </v-col>
 
                         <!-- 最終WP -->
-                        <v-col cols="5">
+                        <v-col cols="4">
                             <v-text-field v-model="inputFinalWP" label="最終WP"></v-text-field>
                         </v-col>
 
                         <!-- 最終WP -->
-                        <v-col cols="5">
+                        <v-col cols="4">
                             <v-text-field v-model="inputBestWP" label="最終WP"></v-text-field>
+                        </v-col>
+
+                        <!-- 順位 -->
+                        <v-col cols="2">
+                            <v-text-field v-model="inputRank" label="順位"></v-text-field>
                         </v-col>
 
                         <!-- シーズン -->
@@ -110,10 +115,26 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />
-                    <v-btn color="primary" @click="generateImage"> チャート有スライド作成 </v-btn>
-                    <v-btn color="secondary" @click="generateImageRookie"> チャート無スライド作成 </v-btn>
-                    <v-btn color="secondary" @click="generateImageRank"> ランク有スライド作成 </v-btn>
-                    <v-btn color="secondary" @click="generateImageRankWeapons"> ランクブキ有スライド作成 </v-btn>
+                    <v-row>
+                        <v-col cols="6" sm="4" md="2">
+                            <v-btn block color="red darken-3" @click="generateImageKraken"> クラーケン用(ブキ無) </v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="4" md="2">
+                            <v-btn block color="red darken-3" @click="generateImageKrakenWithWeapon"> クラーケン用(ブキ有) </v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="4" md="2">
+                            <v-btn block color="blue darken-2" @click="generateImageLeagueStart"> リーグスタート用(ブキ無) </v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="4" md="2">
+                            <v-btn block color="blue darken-2" @click="generateImageLeagueStartWithWeapon"> リーグスタート用(ブキ有) </v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="4" md="2">
+                            <v-btn block color="secondary" @click="generateImageFinish"> シーズン終了証書(ブキ無) </v-btn>
+                        </v-col>
+                        <v-col cols="6" sm="4" md="2">
+                            <v-btn block color="secondary" @click="generateImageFinishWithWeapon"> シーズン終了証書(ブキ有) </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-card-actions>
             </v-card>
             <v-card v-show="imageDataURL" class="pt-1 pr-1 pl-1">
@@ -142,6 +163,7 @@ export default {
         title: 'Output Team',
     },
     async asyncData() {
+        // jsonファイルから武器取得 
         const weapons = await import('@/static/weapons/weapons.json');
         weapons.default.sort((a, b) => {
             const nameA = a.name.toUpperCase();
@@ -158,7 +180,7 @@ export default {
         // Webフォントの読み込みが完了するのを待つために、Promiseを使用
         await new Promise((resolve) => {
             const fontLink = document.createElement('link');
-            fontLink.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap'; // WebフォントのURLを指定
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap'; // WebフォントのURLを指定
             fontLink.rel = 'stylesheet';
             document.head.appendChild(fontLink);
 
@@ -173,46 +195,56 @@ export default {
 
     data() {
         return {
-            inputPlayerName: [],
-            selectPlayerWeapons: {},
-            selectRange: [],
-            selectRole: [],
-            inputTeamName: "",
-            inputComment: "",
-            inputAchievements: [],
-            inputEntryLine: "",
+            // 正規
+            inputPlayerName: [],        // プレイヤー名
+            selectPlayerWeapons: {},    // 使用ブキ
+            selectRange: [],            // レンジ
+            selectRole: [],             // ロール
+            inputTeamName: "",          // チーム名
+            inputComment: "",           // コメント
+            inputAchievements: [],      // 実績
+            inputEntryLine: "",         // 申請リストから貼り付け
 
-            inputFinalWP: "",
-            inputBestWP: "",
-            inputSeason: "",
+            inputFinalWP: "",           // 最終WP
+            inputBestWP: "",            // 最高WP
+            inputRank: "",              // 順位
+            inputSeason: "",            // シーズン
 
-            logoImage: null,
-            defaultLogo: null,
-            rankIcon: null,
+            logoImage: null,            // チームロゴ
+            defaultLogo: null,          // デフォルトチームロゴ
+            rankIcon: null,             // ランクアイコン
 
-            imageDataURL: null,
-            imageName: 'generated_image.png',
-            baseImageUrlFamous: '/ink-wave/team_card/team_slide_a.png',     // コメント実績なし
-            // baseImageUrlFamous: '/ink-wave/team_card/team_slide_c.png',  // ベース画像のURLを設定
-            baseImageUrlRookie: '/ink-wave/team_card/team_slide_b.png',     // コメント実績有
-            baseImageUrlRankWeapon: '/ink-wave/team_card/team_slide_d.png', // ランクアイコンブキ有
-            baseImageUrlRank: '/ink-wave/team_card/team_slide_e.png',       // ランクアイコン有
+            imageDataURL: null,                 // カード生成用URL
+            imageName: 'generated_image.png',   // カードファイル名
+            canvasWidth: 1920,                  // キャンバスの幅
+            canvasHeight: 1080,                 // キャンバスの高さ
+            
+            // カードテンプレート
+            imageKraken: '/ink-wave/team_card/team_slide_kraken.png',                                   // クラーケン用(ブキ無)
+            imageKrakenWithWeapon: '/ink-wave/team_card/team_slide_kraken_weapon.png',                  // クラーケン用(ブキ有)
+            imageUrlLeagueStart: '/ink-wave/team_card/team_slide_league_start.png',                     // リーグスタート用(ブキ無)
+            imageUrlLeagueStartWithWeapon: '/ink-wave/team_card/team_slide_league_start_weapon.png',    // リーグスタート用(ブキ有)
+            imageFinish: '/ink-wave/team_card/team_slide_finish.png',                                   // シーズン終了証書(ブキ無)
+            imageFinishWithWeapon: '/ink-wave/team_card/team_slide_finish_weapon.png',               // シーズン終了証書(ブキ有)
+            
+            // フォルダパス
+            roleIconPath: '/ink-wave/role_icon/',       // ロールアイコン
+            defaultLogoPath: '/ink-wave/default_logo/', // デフォルトロゴ
+            rankIconPath: '/ink-wave/rank_icon/',       // ランクアイコン
+            weaponsIconPath: '/ink-wave/weapons/',      // ブキ
 
-            roleIconPath: '/ink-wave/role_icon/',
-            defaultLogoPath: '/ink-wave/default_logo/',
-            rankIconPath: '/ink-wave/rank_icon/',
-            weaponsIconPath: '/ink-wave/weapons/',
-            canvasWidth: 1920, // キャンバスの幅
-            canvasHeight: 1080, // キャンバスの高さ
-
+            // チャート用データ
             labelData: [0, 0, 0, 0, 0, 0],
             labels: ['打開', '抑え', 'ライン管理', '維持力', '突破力', '塗り'],
+            chartData: null,
 
+            // レンジ
             rangeData: [
                 { 'id': 1, 'name': 'SHORT' },
                 { 'id': 2, 'name': 'MIDDLE' },
                 { 'id': 3, 'name': 'LONG' },
             ],
+            // ロール
             roleData: [
                 { 'tag': 'attack', 'name': 'ATTACKER' },
                 { 'tag': 'support', 'name': 'SUPPORTER' },
@@ -221,6 +253,7 @@ export default {
                 { 'tag': 'runner', 'name': 'MEGAPHONE RUNNER' },
                 { 'tag': 'balance', 'name': 'BALANCER' },
             ],
+            // デフォルトロゴ
             logoData: [
                 { 'id': null, 'name': 'None...', 'image': null },
                 { 'id': 1, 'name': 'Blue', 'image': 'logo_a' },
@@ -228,17 +261,17 @@ export default {
                 { 'id': 3, 'name': 'Green', 'image': 'logo_c' },
                 { 'id': 4, 'name': 'Orange', 'image': 'logo_d' },
             ],
+            // ランクアイコン
             rankIconData: [
                 { 'id': null, 'name': 'None...', 'image': null },
-                { 'id': 1, 'name': 'KRAKEN', 'image': 'RANK1' },
-                { 'id': 2, 'name': 'ORCA', 'image': 'RANK2' },
-                { 'id': 3, 'name': 'SHARK', 'image': 'RANK3' },
-                { 'id': 4, 'name': 'MORAY', 'image': 'RANK4' },
-                { 'id': 5, 'name': 'MANTA', 'image': 'RANK5' },
-                { 'id': 6, 'name': 'PENGUIN', 'image': 'RANK6' },
-                { 'id': 7, 'name': 'JELLYFISH', 'image': 'RANK7' },
+                { 'id': 1, 'name': 'KRAKEN', 'image': 'RANK_KRAKEN' },
+                { 'id': 2, 'name': 'ORCA', 'image': 'RANK_ORCA' },
+                { 'id': 3, 'name': 'SHARK', 'image': 'RANK_SHARK' },
+                { 'id': 4, 'name': 'MORAY', 'image': 'RANK_MORAY' },
+                { 'id': 5, 'name': 'MANTA', 'image': 'RANK_MANTA' },
+                { 'id': 6, 'name': 'PENGUIN', 'image': 'RANK_PENGUIN' },
+                { 'id': 7, 'name': 'JELLYFISH', 'image': 'RANK_JELLYFISH' },
             ],
-            chartData: null,
         };
     },
     created() {
@@ -297,7 +330,8 @@ export default {
                 ]
             }
         },
-        generateImage() {
+        // クラーケン用(ブキ無)
+        generateImageKraken() {
             const canvas = this.$refs.imageCanvas;
             const radarCanvas = document.querySelector('#test canvas');
 
@@ -308,7 +342,7 @@ export default {
             const ctx2 = radarCanvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.baseImageUrlFamous;
+            baseImage.src = this.imageKraken;
 
             baseImage.onload = () => {
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
@@ -409,15 +443,142 @@ export default {
                 this.imageDataURL = canvas.toDataURL();
             }
         },
-        // レーダー、実績、コメントなしver
-        generateImageRookie() {
+        // クラーケン用(ブキ有)
+        generateImageKrakenWithWeapon() {
+            const canvas = this.$refs.imageCanvas;
+            const radarCanvas = document.querySelector('#test canvas');
+
+            if (!canvas || !canvas.getContext) return false;
+            if (!radarCanvas || !radarCanvas.getContext) return false;
+
+            const ctx1 = canvas.getContext('2d');
+            const ctx2 = radarCanvas.getContext('2d');
+
+            const baseImage = new Image();
+            baseImage.src = this.imageKrakenWithWeapon;
+
+            baseImage.onload = () => {
+                ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
+                ctx1.drawImage(ctx2.canvas, 1187 + 60 + 15, 315 + 74 - 20, radarCanvas.width, radarCanvas.height); // radarCanvasではなくctx2.canvasを使用
+
+                // Draw text
+                ctx1.fillStyle = 'white';
+
+                // チームロゴ
+                const maxWidth = 380;
+                const maxHeight = 380;
+                const landing = 55;
+                const top = 50;
+                const logo = new Image();
+                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
+                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
+                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                    } else {
+                        logo.src = this.selectLogo;
+                    }
+
+                    logo.onload = () => {
+                        let logoWidth = maxWidth;
+                        let logoHeight = maxHeight;
+                        // 比率が1:1の場合
+                        if (logo.width === logo.height) {
+                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
+                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
+                        } else if (logo.width > logo.height) { // ヨコが長い
+                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
+                            const ratio = logo.width / logoWidth;
+                            logoHeight = logo.height / ratio;
+                        } else { // タテが長い
+                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
+                            const ratio = logo.height / logoHeight;
+                            logoWidth = logo.width / ratio;
+                        }
+
+                        const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
+                        const y = (maxHeight + top - logoHeight) / 2 + top / 2;
+                        ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
+                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        this.imageDataURL = canvas.toDataURL();
+                    }
+                }
+
+                // TEAM
+                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
+                ctx1.fillText(this.inputTeamName, 512, 123);
+
+                // MEMBER
+                ctx1.font = "bold 26px 'Noto Sans JP', sans-serif";
+                this.inputPlayerName.forEach(function (name, index) {
+                    ctx1.fillText(name, 86, 563 + (index * 106));
+                })
+
+                // RANGE
+                const self = this;
+                this.selectRange.forEach(function (rangeId, index) {
+                    const range = self.rangeData.find(item => item.id === rangeId);
+                    const left = 378;
+                    const x = (180 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
+                    ctx1.fillText(range.name, x, 563 + (index * 106));
+                })
+
+                // ROLE
+                this.selectRole.forEach(function (roleTag, index) {
+                    const role = self.roleData.find(item => item.tag === roleTag);
+                    ctx1.fillText(role.name, 617, 563 + (index * 106));
+                    const roleIcon = new Image();
+                    roleIcon.src = self.roleIconPath + roleTag + '.png';
+                    roleIcon.onload = () => {
+                        ctx1.drawImage(roleIcon, 565, 527 + (index * 106), 50, 50);
+                        self.imageDataURL = canvas.toDataURL();
+                    }
+                })
+
+                // 使用ブキ
+                for (const key in this.selectPlayerWeapons) {
+                    const weapons = this.selectPlayerWeapons[key];
+                    weapons.forEach(function (fileName, index) {
+                        const icon = new Image();
+                        icon.src = self.weaponsIconPath + fileName;
+                        icon.onload = () => {
+                            ctx1.drawImage(icon, 924 + (index * 80), 510 + (key * 106), 75, 75);
+                            self.imageDataURL = canvas.toDataURL();
+                        }
+                    })
+                }
+
+                // 実績
+                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
+                this.inputAchievements.forEach(function (achievements, index) {
+                    ctx1.fillText(achievements, 1238, 115 + (index * 60));
+                })
+
+                // COMMENT
+                ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
+                const n2Array = this.inputComment.split('\n');
+                const lines = [];
+                const lineHeight = 50;
+                n2Array.forEach((element) => {
+                    for (let i = 0; i < element.length; i += 29) {
+                        lines.push(element.slice(i, i + 29));
+                    }
+                });
+
+                for (let i = 0; i < (lines.length > 5 ? 5 : lines.length); i++) {
+                    ctx1.fillText(lines[i], 509, 239 + (i * lineHeight));
+                }
+
+                this.imageDataURL = canvas.toDataURL();
+            }
+        },
+        // リーグスタート用(ブキ無)
+        generateImageLeagueStart() {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
 
             const ctx1 = canvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.baseImageUrlRookie;
+            baseImage.src = this.imageUrlLeagueStart;
 
             baseImage.onload = () => {
                 canvas.width = this.canvasWidth; // Canvasの幅を設定
@@ -498,26 +659,26 @@ export default {
             this.imageDataURL = canvas.toDataURL();
         },
 
-        generateImageRankWeapons() {
+        // リーグスタート用(ブキ有)
+        generateImageLeagueStartWithWeapon() {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
+
             const ctx1 = canvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.baseImageUrlRank;
+            baseImage.src = this.imageUrlLeagueStartWithWeapon;
 
             baseImage.onload = () => {
+                canvas.width = this.canvasWidth; // Canvasの幅を設定
+                canvas.height = this.canvasHeight; // Canvasの高さを設定
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
 
-                // Draw text
-                ctx1.fillStyle = 'white';
-
                 // チームロゴ
-                const maxWidth = 470;
-                const maxHeight = 470;
-                const landing = 110;
-                const top = 207;
-                
+                const maxWidth = 585;
+                const maxHeight = 585;
+                const landing = 50;
+                const top = 272;
                 const logo = new Image();
                 if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
                     if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
@@ -548,92 +709,67 @@ export default {
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
                         if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
-
-                        // ランクアイコン
-                        if (this.rankIcon) {
-                            const icon = new Image();
-                            icon.src = this.selectRankIcon;
-                            icon.onload = () => {
-                                ctx1.drawImage(icon, 243-33, 673, 270, 270);
-                                this.imageDataURL = canvas.toDataURL();
-                            }
-                        }
                     }
                 }
 
+                ctx1.fillStyle = 'white';
+
                 // TEAM
-                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputTeamName, 682, 230);
+                ctx1.font = "bold 60px 'Noto Sans JP', sans-serif";
+                ctx1.fillText(this.inputTeamName, 732, 280);
 
                 // MEMBER
-                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
+                ctx1.font = "bold 26px 'Noto Sans JP', sans-serif";
                 this.inputPlayerName.forEach(function (name, index) {
-                    ctx1.fillText(name, 706, 377 + (index * 106));
+                    ctx1.fillText(name, 714, 423 + (index * 106));
                 })
 
                 // RANGE
                 const self = this;
                 this.selectRange.forEach(function (rangeId, index) {
                     const range = self.rangeData.find(item => item.id === rangeId);
-                    const left = 971;
+                    const left = 1004;
                     const x = (180 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
-                    ctx1.fillText(range.name, x, 374 + (index * 106));
+                    ctx1.fillText(range.name, x, 423 + (index * 106));
                 })
 
                 // ROLE
                 this.selectRole.forEach(function (roleTag, index) {
                     const role = self.roleData.find(item => item.tag === roleTag);
-                    ctx1.fillText(role.name, 1223, 374 + (index * 106));
+                    ctx1.fillText(role.name, 1244, 423 + (index * 106));
                     const roleIcon = new Image();
                     roleIcon.src = self.roleIconPath + roleTag + '.png';
                     roleIcon.onload = () => {
-                        ctx1.drawImage(roleIcon, 1171, 339 + (index * 106), 50, 50);
+                        ctx1.drawImage(roleIcon, 1191, 386 + (index * 106), 50, 50);
                         self.imageDataURL = canvas.toDataURL();
                     }
                 })
 
                 // 使用ブキ
                 for (const key in this.selectPlayerWeapons) {
-                    // if (this.selectPlayerWeapons.hasOwnProperty(key)) {
-                        const weapons = this.selectPlayerWeapons[key];
-                        weapons.forEach(function (fileName, index) {
-                            const icon = new Image();
-                            icon.src = self.weaponsIconPath + fileName;
-                            icon.onload = () => {
-                                ctx1.drawImage(icon, 1560 + (index * 95), 322 + (key * 106), 85, 85);
-                                self.imageDataURL = canvas.toDataURL();
-                            }
-                        })
-                    // }
+                    const weapons = this.selectPlayerWeapons[key];
+                    weapons.forEach(function (fileName, index) {
+                        const icon = new Image();
+                        icon.src = self.weaponsIconPath + fileName;
+                        icon.onload = () => {
+                            ctx1.drawImage(icon, 1568 + (index * 80), 369 + (key * 106), 75, 75);
+                            self.imageDataURL = canvas.toDataURL();
+                        }
+                    })
                 }
-
-                // 最終WP
-                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
-                let left = 174;
-                let x = (155 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
-                ctx1.fillText(this.inputFinalWP, x, 170);
-
-                // 最高WP
-                left = 359;
-                x = (159 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
-                ctx1.fillText(this.inputBestWP, x, 170);
-
-                // シーズン
-                ctx1.font = "bold 54px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputSeason, 1178, 962);
-
-                this.imageDataURL = canvas.toDataURL();
             }
+            this.imageDataURL = canvas.toDataURL();
         },
 
-        generateImageRank() {
+        // シーズン終了証書(ブキ無)
+        generateImageFinish() {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
 
             const ctx1 = canvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.baseImageUrlRankWeapon;
+            baseImage.src = this.imageFinish;
 
             baseImage.onload = () => {
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
@@ -684,6 +820,13 @@ export default {
                             icon.src = this.selectRankIcon;
                             icon.onload = () => {
                                 ctx1.drawImage(icon, 243, 673, 270, 270);
+
+                                // 順位
+                                ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
+                                const left = 363;
+                                const x = (29 + left - ctx1.measureText(this.inputRank).width) / 2 + left / 2;
+                                ctx1.fillText(this.inputRank, x, 886);
+
                                 this.imageDataURL = canvas.toDataURL();
                             }
                         }
@@ -733,8 +876,142 @@ export default {
                 ctx1.fillText(this.inputBestWP, x, 170);
 
                 // シーズン
-                ctx1.font = "bold 54px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputSeason, 1178, 962);
+                ctx1.font = "58px 'Lato', sans-serif";
+                ctx1.fillText(this.inputSeason, 1180, 962);
+
+                this.imageDataURL = canvas.toDataURL();
+            }
+        },
+
+        // シーズン終了証書(ブキ有)
+        generateImageFinishWithWeapon () {
+            const canvas = this.$refs.imageCanvas;
+            if (!canvas || !canvas.getContext) return false;
+            const ctx1 = canvas.getContext('2d');
+
+            const baseImage = new Image();
+            baseImage.src = this.imageFinishWithWeapon;
+
+            baseImage.onload = () => {
+                ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
+
+                // Draw text
+                ctx1.fillStyle = 'white';
+
+                // チームロゴ
+                const maxWidth = 470;
+                const maxHeight = 470;
+                const landing = 110;
+                const top = 207;
+                
+                const logo = new Image();
+                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
+                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
+                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                    } else {
+                        logo.src = this.selectLogo;
+                    }
+
+                    logo.onload = () => {
+                        let logoWidth = maxWidth;
+                        let logoHeight = maxHeight;
+                        // 比率が1:1の場合
+                        if (logo.width === logo.height) {
+                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
+                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
+                        } else if (logo.width > logo.height) { // ヨコが長い
+                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
+                            const ratio = logo.width / logoWidth;
+                            logoHeight = logo.height / ratio;
+                        } else { // タテが長い
+                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
+                            const ratio = logo.height / logoHeight;
+                            logoWidth = logo.width / ratio;
+                        }
+
+                        const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
+                        const y = (maxHeight + top - logoHeight) / 2 + top / 2;
+                        ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
+                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        this.imageDataURL = canvas.toDataURL();
+
+                        // ランクアイコン
+                        if (this.rankIcon) {
+                            const icon = new Image();
+                            icon.src = this.selectRankIcon;
+                            icon.onload = () => {
+                                ctx1.drawImage(icon, 243-33, 673, 270, 270);
+
+                                // 順位
+                                ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
+                                const left = 330;
+                                const x = (29 + left - ctx1.measureText(this.inputRank).width) / 2 + left / 2;
+                                ctx1.fillText(this.inputRank, x, 886);
+
+                                this.imageDataURL = canvas.toDataURL();
+                            }
+                        }
+                    }
+                }
+
+                // TEAM
+                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
+                ctx1.fillText(this.inputTeamName, 682, 230);
+
+                // MEMBER
+                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
+                this.inputPlayerName.forEach(function (name, index) {
+                    ctx1.fillText(name, 706, 377 + (index * 106));
+                })
+
+                // RANGE
+                const self = this;
+                this.selectRange.forEach(function (rangeId, index) {
+                    const range = self.rangeData.find(item => item.id === rangeId);
+                    const left = 971;
+                    const x = (180 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
+                    ctx1.fillText(range.name, x, 374 + (index * 106));
+                })
+
+                // ROLE
+                this.selectRole.forEach(function (roleTag, index) {
+                    const role = self.roleData.find(item => item.tag === roleTag);
+                    ctx1.fillText(role.name, 1223, 374 + (index * 106));
+                    const roleIcon = new Image();
+                    roleIcon.src = self.roleIconPath + roleTag + '.png';
+                    roleIcon.onload = () => {
+                        ctx1.drawImage(roleIcon, 1171, 339 + (index * 106), 50, 50);
+                        self.imageDataURL = canvas.toDataURL();
+                    }
+                })
+
+                // 使用ブキ
+                for (const key in this.selectPlayerWeapons) {
+                    const weapons = this.selectPlayerWeapons[key];
+                    weapons.forEach(function (fileName, index) {
+                        const icon = new Image();
+                        icon.src = self.weaponsIconPath + fileName;
+                        icon.onload = () => {
+                            ctx1.drawImage(icon, 1560 + (index * 95), 322 + (key * 106), 85, 85);
+                            self.imageDataURL = canvas.toDataURL();
+                        }
+                    })
+                }
+
+                // 最終WP
+                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
+                let left = 174;
+                let x = (155 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
+                ctx1.fillText(this.inputFinalWP, x, 170);
+
+                // 最高WP
+                left = 359;
+                x = (159 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
+                ctx1.fillText(this.inputBestWP, x, 170);
+
+                // シーズン
+                ctx1.font = "58px 'Lato', sans-serif";
+                ctx1.fillText(this.inputSeason, 1180, 962);
 
                 this.imageDataURL = canvas.toDataURL();
             }
