@@ -864,16 +864,16 @@ export default {
                     }
                 })
 
-                // 最終WP
+                // 最高WP
                 ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
                 let left = 174 + 33;
-                let x = (155 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
-                ctx1.fillText(this.inputFinalWP, x, 170);
-
-                // 最高WP
-                left = 359 + 33;
-                x = (159 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
+                let x = (155 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
                 ctx1.fillText(this.inputBestWP, x, 170);
+
+                // 最終WP
+                left = 359 + 33;
+                x = (159 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
+                ctx1.fillText(this.inputFinalWP, x, 170);
 
                 // シーズン
                 ctx1.font = "58px 'Lato', sans-serif";
@@ -998,16 +998,16 @@ export default {
                     })
                 }
 
-                // 最終WP
+                // 最高WP
                 ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
                 let left = 174;
-                let x = (155 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
-                ctx1.fillText(this.inputFinalWP, x, 170);
-
-                // 最高WP
-                left = 359;
-                x = (159 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
+                let x = (155 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
                 ctx1.fillText(this.inputBestWP, x, 170);
+
+                // 最終WP
+                left = 359;
+                x = (159 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
+                ctx1.fillText(this.inputFinalWP, x, 170);
 
                 // シーズン
                 ctx1.font = "58px 'Lato', sans-serif";
