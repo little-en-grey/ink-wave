@@ -74,14 +74,14 @@
                             <v-text-field v-model="inputAchievements[i - 1]" :label="'Achievements' + i"></v-text-field>
                         </v-col>
 
-                        <!-- 最終WP -->
-                        <v-col cols="4">
-                            <v-text-field v-model="inputFinalWP" label="最終WP"></v-text-field>
-                        </v-col>
-
                         <!-- 最高WP -->
                         <v-col cols="4">
                             <v-text-field v-model="inputBestWP" label="最高WP"></v-text-field>
+                        </v-col>
+
+                        <!-- 最終WP -->
+                        <v-col cols="4">
+                            <v-text-field v-model="inputFinalWP" label="最終WP"></v-text-field>
                         </v-col>
 
                         <!-- 順位 -->
