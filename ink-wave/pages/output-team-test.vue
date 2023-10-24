@@ -473,9 +473,12 @@ export default {
                 const landing = 55;
                 const top = 50;
                 const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                if (this.logoImage || this.defaultLogo) {
+                    if (this.logoImage) {
+                        const regex = /id=(\w+)/;
+                        const match = this.logoImage.match(regex);
+                        const fileUrl = "https://drive.google.com/uc?id=" + match[1];
+                        logo.src = fileUrl; // ファイルからURLを生成
                     } else {
                         logo.src = this.selectLogo;
                     }
@@ -500,7 +503,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
                     }
                 }
@@ -594,9 +597,12 @@ export default {
                 const landing = 50;
                 const top = 272;
                 const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                if (this.logoImage || this.defaultLogo) {
+                    if (this.logoImage) {
+                        const regex = /id=(\w+)/;
+                        const match = this.logoImage.match(regex);
+                        const fileUrl = "https://drive.google.com/uc?id=" + match[1];
+                        logo.src = fileUrl; // ファイルからURLを生成
                     } else {
                         logo.src = this.selectLogo;
                     }
@@ -621,7 +627,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
                     }
                 }
@@ -683,9 +689,12 @@ export default {
                 const landing = 50;
                 const top = 272;
                 const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                if (this.logoImage || this.defaultLogo) {
+                    if (this.logoImage) {
+                        const regex = /id=(\w+)/;
+                        const match = this.logoImage.match(regex);
+                        const fileUrl = "https://drive.google.com/uc?id=" + match[1];
+                        logo.src = fileUrl; // ファイルからURLを生成
                     } else {
                         logo.src = this.selectLogo;
                     }
@@ -710,7 +719,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
                     }
                 }
@@ -787,9 +796,12 @@ export default {
                 const top = 207;
                 
                 const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                if (this.logoImage || this.defaultLogo) {
+                    if (this.logoImage) {
+                        const regex = /id=(\w+)/;
+                        const match = this.logoImage.match(regex);
+                        const fileUrl = "https://drive.google.com/uc?id=" + match[1];
+                        logo.src = fileUrl; // ファイルからURLを生成
                     } else {
                         logo.src = this.selectLogo;
                     }
@@ -814,7 +826,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
 
                         // ランクアイコン
@@ -908,9 +920,12 @@ export default {
                 const top = 207;
                 
                 const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
+                if (this.logoImage || this.defaultLogo) {
+                    if (this.logoImage) {
+                        const regex = /id=(\w+)/;
+                        const match = this.logoImage.match(regex);
+                        const fileUrl = "https://drive.google.com/uc?id=" + match[1];
+                        logo.src = fileUrl; // ファイルからURLを生成
                     } else {
                         logo.src = this.selectLogo;
                     }
@@ -935,7 +950,7 @@ export default {
                         const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
                         const y = (maxHeight + top - logoHeight) / 2 + top / 2;
                         ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
+                        if (this.logoImage) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
                         this.imageDataURL = canvas.toDataURL();
 
                         // ランクアイコン
