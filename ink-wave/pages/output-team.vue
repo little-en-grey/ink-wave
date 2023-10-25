@@ -117,22 +117,22 @@
                     <v-spacer />
                     <v-row>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="red darken-3" @click="generateImageKraken"> クラーケン用(ブキ無) </v-btn>
+                            <v-btn block color="red darken-3" @click="generateImageKraken">クラーケン用(ブキ無)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="red darken-3" @click="generateImageKrakenWithWeapon"> クラーケン用(ブキ有) </v-btn>
+                            <v-btn block color="red darken-3" @click="generateImageKrakenWithWeapon">クラーケン用(ブキ有)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="blue darken-2" @click="generateImageLeagueStart"> リーグスタート用(ブキ無) </v-btn>
+                            <v-btn block color="blue darken-2" @click="generateImageLeagueStart">リーグスタート用(ブキ無)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="blue darken-2" @click="generateImageLeagueStartWithWeapon"> リーグスタート用(ブキ有) </v-btn>
+                            <v-btn block color="blue darken-2" @click="generateImageLeagueStartWithWeapon">リーグスタート用(ブキ有)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="secondary" @click="generateImageFinish"> シーズン終了証書(ブキ無) </v-btn>
+                            <v-btn block color="secondary" @click="generateImageFinish">シーズン終了証書(ブキ無)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="secondary" @click="generateImageFinishWithWeapon"> シーズン終了証書(ブキ有) </v-btn>
+                            <v-btn block color="secondary" @click="generateImageFinishWithWeapon">シーズン終了証書(ブキ有)</v-btn>
                         </v-col>
                     </v-row>
                 </v-card-actions>
