@@ -196,7 +196,7 @@
         "filename": "Slosher_Diffusion_00.png"
     },
     {
-        "name": "ヒッセンヒュー",
+        "name": "ヒッセン・ヒュー",
         "filename": "Slosher_Diffusion_01.png"
     },
     {
@@ -276,7 +276,7 @@
         "filename": "Maneuver_Short_00.png"
     },
     {
-        "name": "スパッタリーヒュー",
+        "name": "スパッタリー・ヒュー",
         "filename": "Maneuver_Short_01.png"
     },
     {
@@ -360,7 +360,7 @@
         "filename": "Brush_Mini_00.png"
     },
     {
-        "name": "パブロヒュー",
+        "name": "パブロ・ヒュー",
         "filename": "Brush_Mini_01.png"
     },
     {
@@ -398,5 +398,9 @@
     {
         "name": "ジムワイパー",
         "filename": "Saber_Normal_00.png"
+    },
+    {
+        "name": "ヒーローシューター レプリカ",
+        "filename": "Shooter_Normal_H.png"
     }
 ]

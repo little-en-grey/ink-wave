@@ -1,9 +1,0 @@
-{
-  "name": "ink-wave",
-  "short_name": "ink-wave",
-  "icons": [],
-  "start_url": "/ink-wave/?standalone=true",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "lang": "en"
-}

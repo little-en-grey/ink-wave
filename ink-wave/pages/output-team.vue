@@ -126,7 +126,8 @@
                             <v-btn block color="blue darken-2" @click="generateImageLeagueStart">リーグスタート用(ブキ無)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="blue darken-2" @click="generateImageLeagueStartWithWeapon">リーグスタート用(ブキ有)</v-btn>
+                            <v-btn block color="blue darken-2"
+                                @click="generateImageLeagueStartWithWeapon">リーグスタート用(ブキ有)</v-btn>
                         </v-col>
                         <v-col cols="6" sm="4" md="2">
                             <v-btn block color="secondary" @click="generateImageFinish">シーズン終了証書(ブキ無)</v-btn>
@@ -218,7 +219,7 @@ export default {
             imageName: 'generated_image.png',   // カードファイル名
             canvasWidth: 1920,                  // キャンバスの幅
             canvasHeight: 1080,                 // キャンバスの高さ
-            
+
             // カードテンプレート
             imageKraken: '/ink-wave/team_card/team_slide_kraken.png',                                   // クラーケン用(ブキ無)
             imageKrakenWithWeapon: '/ink-wave/team_card/team_slide_kraken_weapon.png',                  // クラーケン用(ブキ有)
@@ -226,7 +227,7 @@ export default {
             imageUrlLeagueStartWithWeapon: '/ink-wave/team_card/team_slide_league_start_weapon.png',    // リーグスタート用(ブキ有)
             imageFinish: '/ink-wave/team_card/team_slide_finish.png',                                   // シーズン終了証書(ブキ無)
             imageFinishWithWeapon: '/ink-wave/team_card/team_slide_finish_weapon.png',               // シーズン終了証書(ブキ有)
-            
+
             // フォルダパス
             roleIconPath: '/ink-wave/role_icon/',       // ロールアイコン
             defaultLogoPath: '/ink-wave/default_logo/', // デフォルトロゴ
@@ -782,7 +783,7 @@ export default {
                 const maxHeight = 470;
                 const landing = 143;
                 const top = 207;
-                
+
                 const logo = new Image();
                 if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
                     if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
@@ -884,7 +885,7 @@ export default {
         },
 
         // シーズン終了証書(ブキ有)
-        generateImageFinishWithWeapon () {
+        generateImageFinishWithWeapon() {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
             const ctx1 = canvas.getContext('2d');
@@ -903,7 +904,7 @@ export default {
                 const maxHeight = 470;
                 const landing = 110;
                 const top = 207;
-                
+
                 const logo = new Image();
                 if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
                     if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
@@ -940,7 +941,7 @@ export default {
                             const icon = new Image();
                             icon.src = this.selectRankIcon;
                             icon.onload = () => {
-                                ctx1.drawImage(icon, 243-33, 673, 270, 270);
+                                ctx1.drawImage(icon, 243 - 33, 673, 270, 270);
 
                                 // 順位
                                 ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
@@ -1023,23 +1024,39 @@ export default {
                 splitData = this.inputEntryLine.split('\t');
 
                 this.inputPlayerName = []
-                // this.selectPlayerWeapons = []
+                this.selectPlayerWeapons = []
                 this.selectRange = []
                 this.selectRole = []
 
                 if (splitData.length > 31) {
                     this.inputTeamName = splitData[1]
                     this.inputPlayerName.push(splitData[5], splitData[11], splitData[16], splitData[21])
-                    // this.selectPlayerWeapons
                     this.selectRange.push(this.getRange(splitData[9]), this.getRange(splitData[14]), this.getRange(splitData[19]), this.getRange(splitData[24]))
                     this.selectRole.push(this.getRole(splitData[10]), this.getRole(splitData[15]), this.getRole(splitData[20]), this.getRole(splitData[25]))
 
                     // スーパーサブの追加
-                    if (splitData[26] === 'はい') {
+                    if (splitData[27] !== '') {
                         this.inputPlayerName.push(splitData[27])
-                        // this.selectPlayerWeapons
                         this.selectRange.push(this.getRange(splitData[30]))
                         this.selectRole.push(this.getRole(splitData[31]))
+                    }
+
+                    // ブキ
+                    const startIndex = 32; // 開始インデックス
+                    const endIndex = 46;   // 終了インデックス
+                    const chunkSize = 3;
+                    for (let i = startIndex; i <= endIndex; i++) {
+                        const relativeIndex = i - startIndex;
+                        const groupIndex = Math.floor(relativeIndex / chunkSize);
+                        if (!this.selectPlayerWeapons[groupIndex]) {
+                            this.selectPlayerWeapons[groupIndex] = [];
+                        }
+                        if (splitData[i]) {
+                            const weapon = this.getWeapon(splitData[i]);
+                            if (!this.selectPlayerWeapons[groupIndex].includes(weapon)) {
+                                this.selectPlayerWeapons[groupIndex].push(weapon);
+                            }
+                        }
                     }
 
                     if (splitData[3] !== "") {
@@ -1095,6 +1112,15 @@ export default {
                     return 4
                 default:
                     return null
+            }
+        },
+
+        getWeapon(value) {
+            const data = this.allWeaponsData.find(weapon => weapon.name === value);
+            if (data) {
+                return data.filename
+            } else {
+                return null
             }
         }
     },
