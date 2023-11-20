@@ -19,6 +19,8 @@
                         <v-col cols="12">
                             <v-text-field v-model="inputTeamName" label="Team Name"></v-text-field>
                         </v-col>
+                    </v-row>
+                    <v-row justify="start">
                         <!-- メンバー情報 -->
                         <v-col v-for="i in 5" :key="i" cols="12" sm="6">
                             <v-row justify="start">
@@ -47,7 +49,8 @@
                                 </v-col>
                             </v-row>
                         </v-col>
-
+                    </v-row>
+                    <v-row justify="start">
                         <!-- チームロゴ -->
                         <v-col cols="8">
                             <v-file-input v-model="logoImage" label="Logo Image" :disabled="defaultLogo"></v-file-input>
