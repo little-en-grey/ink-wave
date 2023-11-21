@@ -214,13 +214,13 @@ export default {
                 ctx1.fillText(this.inputStartTime, 973, 155);
 
                 // チームロゴ
-                const maxWidth = 455;
-                const maxHeight = 455;
+                const maxWidth = 425;
+                const maxHeight = 425;
                 const logoA = new Image();
                 const logoB = new Image();
 
-                const landingA = 263;
-                const top = 99;
+                const landingA = 233;
+                const top = 124;
                 if ((this.logoImageA && this.logoImageA.type && this.logoImageA.type.match('image/')) || this.defaultLogoA) {
                     if (this.logoImageA && this.logoImageA.type && this.logoImageA.type.match('image/')) {
                         logoA.src = URL.createObjectURL(this.logoImageA); // ファイルからURLを生成
@@ -254,7 +254,7 @@ export default {
                     }
                 }
 
-                const landingB = 1192;
+                const landingB = 1262;
                 if ((this.logoImageB && this.logoImageB.type && this.logoImageB.type.match('image/')) || this.defaultLogoB) {
                     if (this.logoImageB && this.logoImageB.type && this.logoImageB.type.match('image/')) {
                         logoB.src = URL.createObjectURL(this.logoImageB); // ファイルからURLを生成
