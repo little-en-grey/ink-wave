@@ -72,15 +72,19 @@
                             <v-img v-if="defaultLogoB" :src="selectLogoB" max-height="50" max-width="50"></v-img>
                         </v-col>
 
-                        <v-col cols="4">
+                        <v-col cols="3">
                             <v-text-field v-model="inputStartTime"
                                         label="START"></v-text-field>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="3">
                             <v-text-field v-model="inputCommentary"
                                         label="実況"></v-text-field>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="3">
+                            <v-text-field v-model="inputExplanation"
+                                        label="解説"></v-text-field>
+                        </v-col>
+                        <v-col cols="3">
                             <v-text-field v-model="inputObserver"
                                         label="オブザーバー"></v-text-field>
                         </v-col>
@@ -150,6 +154,7 @@ export default {
             inputScoreB: 0,
 
             inputCommentary: "",
+            inputExplanation: "",
             inputObserver: "",
             inputStartTime: "",
 
@@ -209,9 +214,10 @@ export default {
                 ctx1.fillStyle = 'white';
 
                 ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputCommentary, 973, 205);
-                ctx1.fillText(this.inputObserver, 973, 256);
                 ctx1.fillText(this.inputStartTime, 973, 155);
+                ctx1.fillText(this.inputCommentary, 973, 205);
+                ctx1.fillText(this.inputExplanation, 973, 255);
+                ctx1.fillText(this.inputObserver, 973, 305);
 
                 // チームロゴ
                 const maxWidth = 425;
