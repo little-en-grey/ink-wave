@@ -53,10 +53,33 @@
                             <v-select v-model="inputScoreB[i - 1]" :items="[0, 1, 2, 3]" label="ScoreB"></v-select>
                         </v-col>
                     </v-row>
+                    <!-- サムネ関係 -->
+                    <v-row justify="start">
+                        <v-col cols="12">
+                            <div class="text-subtitle-1">配信サムネ作成</div>
+                        </v-col>
+                        <!-- DAY -->
+                        <v-col cols="3">
+                            <v-text-field v-model="dayNo" label="DAY"></v-text-field>
+                        </v-col>
+                        <!-- Season -->
+                        <v-col cols="3">
+                            <v-text-field v-model="seasonNo" label="Season"></v-text-field>
+                        </v-col>
+                        <!-- 実況 -->
+                        <v-col cols="3">
+                            <v-file-input v-model="logoImageCommentary" label="実況アイコン"></v-file-input>
+                        </v-col>
+                        <!-- 解説 -->
+                        <v-col cols="3">
+                            <v-file-input v-model="logoImageExplanation" label="解説アイコン"></v-file-input>
+                        </v-col>
+                    </v-row>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />
                     <v-btn color="primary" @click="generateImage"> スライド作成 </v-btn>
+                    <v-btn color="red darken-3" @click="generateImageThumbnail">サムネイル作成</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card v-show="imageDataURL" class="pt-1 pr-1 pl-1">
@@ -109,6 +132,7 @@ export default {
             imageName: 'generated_image.png',
             baseImageUrl: '/ink-wave/todays_result/todays_result2.jpg', // ベース画像のURLを設定
             // baseImageUrl: '/ink-wave/todays_result/todays_result2_sample.jpg', // ベース画像のURLを設定
+            thumbnailImageUrl: '/ink-wave/todays_result/thumb.jpg',
             defaultLogoPath: '/ink-wave/default_logo/',
             canvasWidth: 1920, // キャンバスの幅
             canvasHeight: 1080, // キャンバスの高さ
@@ -120,6 +144,12 @@ export default {
                 { 'id': 3, 'name': 'Green', 'image': 'logo_c' },
                 { 'id': 4, 'name': 'Orange', 'image': 'logo_d' },
             ],
+
+            // 配信サムネ用
+            seasonNo: "",
+            dayNo: "",
+            logoImageCommentary: "",
+            logoImageExplanation: "",
 
         };
     },
@@ -230,6 +260,165 @@ export default {
                     // スコアB
                     if (this.inputScoreB[i] !== undefined) ctx1.fillText(this.inputScoreB[i], 1040, 358 + (i * 180));
                 }
+                this.imageDataURL = canvas.toDataURL();
+            }
+        },
+        generateImageThumbnail() {
+            const canvas = this.$refs.imageCanvas;
+            if (!canvas || !canvas.getContext) return false;
+            const ctx1 = canvas.getContext('2d');
+
+            const baseImage = new Image();
+            baseImage.src = this.thumbnailImageUrl;
+
+            baseImage.onload = () => {
+                ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
+
+                // Draw text
+                ctx1.fillStyle = 'white';
+
+                // チームロゴ
+                const maxWidth = 164;
+                const maxHeight = 164;
+
+                const landingA = 139;
+                const landingB = 1607;
+                const top = 325;
+
+                for (let i = 0; i < this.count; i++) {
+                    const logoA = new Image();
+                    const logoB = new Image();
+
+                    if ((this.logoImageA[i] && this.logoImageA[i].type && this.logoImageA[i].type.match('image/')) || this.defaultLogoA[i]) {
+                        if (this.logoImageA[i] && this.logoImageA[i].type && this.logoImageA[i].type.match('image/')) {
+                            logoA.src = URL.createObjectURL(this.logoImageA[i]); // ファイルからURLを生成
+                        } else {
+                            logoA.src = this.selectLogo(this.defaultLogoA[i]);
+                        }
+
+                        logoA.onload = () => {
+                            let logoWidth = maxWidth;
+                            let logoHeight = maxHeight;
+                            // 比率が1:1の場合
+                            if (logoA.width === logoA.height) {
+                                logoWidth = logoA.width <= maxWidth ? logoA.width : maxWidth;
+                                logoHeight = logoA.height <= maxHeight ? logoA.height : maxHeight;
+                            } else if (logoA.width > logoA.height) { // ヨコが長い
+                                logoWidth = logoA.width <= maxWidth ? logoA.width : maxWidth;
+                                const ratio = logoA.width / logoWidth;
+                                logoHeight = logoA.height / ratio;
+                            } else { // タテが長い
+                                logoHeight = logoA.height <= maxHeight ? logoA.height : maxHeight;
+                                const ratio = logoA.height / logoHeight;
+                                logoWidth = logoA.width / ratio;
+                            }
+
+                            const x = (maxWidth + landingA - logoWidth) / 2 + landingA / 2;
+                            const y = (maxHeight + (top + (i * 180)) - logoHeight) / 2 + (top + (i * 180)) / 2;
+                            ctx1.drawImage(logoA, x, y, logoWidth, logoHeight);
+                            if (this.logoImageA[i] && this.logoImageA[i].type && this.logoImageA[i].type.match('image/')) URL.revokeObjectURL(logoA.src); // 不要になったURLを解放
+                            this.imageDataURL = canvas.toDataURL();
+                        }
+                    }
+
+                    if ((this.logoImageB[i] && this.logoImageB[i].type && this.logoImageB[i].type.match('image/')) || this.defaultLogoB[i]) {
+                        if (this.logoImageB[i] && this.logoImageB[i].type && this.logoImageB[i].type.match('image/')) {
+                            logoB.src = URL.createObjectURL(this.logoImageB[i]); // ファイルからURLを生成
+                        } else {
+                            logoB.src = this.selectLogo(this.defaultLogoB[i]);
+                        }
+
+                        logoB.onload = () => {
+                            let logoWidth = maxWidth;
+                            let logoHeight = maxHeight;
+                            // 比率が1:1の場合
+                            if (logoB.width === logoB.height) {
+                                logoWidth = logoB.width <= maxWidth ? logoB.width : maxWidth;
+                                logoHeight = logoB.height <= maxHeight ? logoB.height : maxHeight;
+                            } else if (logoB.width > logoB.height) { // ヨコが長い
+                                logoWidth = logoB.width <= maxWidth ? logoB.width : maxWidth;
+                                const ratio = logoB.width / logoWidth;
+                                logoHeight = logoB.height / ratio;
+                            } else { // タテが長い
+                                logoHeight = logoB.height <= maxHeight ? logoB.height : maxHeight;
+                                const ratio = logoB.height / logoHeight;
+                                logoWidth = logoB.width / ratio;
+                            }
+
+                            const x = (maxWidth + landingB - logoWidth) / 2 + landingB / 2;
+                            const y = (maxHeight + (top + (i * 180)) - logoHeight) / 2 + (top + (i * 180)) / 2;
+                            ctx1.drawImage(logoB, x, y, logoWidth, logoHeight);
+                            if (this.logoImageB[i] && this.logoImageB[i].type && this.logoImageB[i].type.match('image/')) URL.revokeObjectURL(logoB.src); // 不要になったURLを解放
+                            this.imageDataURL = canvas.toDataURL();
+                        }
+                    }
+
+                    // TEAM A
+                    ctx1.textAlign = "right";
+                    ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
+                    if (this.inputTeamNameA[i] !== undefined) ctx1.fillText(this.inputTeamNameA[i], 855, 430 + (i * 180));
+
+                    // TEAM B
+                    ctx1.textAlign = "left";
+                    if (this.inputTeamNameB[i] !== undefined) ctx1.fillText(this.inputTeamNameB[i], 1063, 430 + (i * 180));
+                }
+                // Day
+                const dayMaxWidth = 125;
+                let fontSize = 150;
+                const dayTextWidth = ctx1.measureText( this.dayNo ).width;
+                // 横幅が最大幅を超える場合は、フォントサイズを調整
+                if (dayTextWidth > dayMaxWidth) {
+                    // 適当なフォントサイズに調整するロジックを追加
+                    fontSize = Math.floor(fontSize * (dayMaxWidth / dayTextWidth));
+                }
+                ctx1.font = `bold ${fontSize}px 'Noto Sans JP', sans-serif`;
+                ctx1.fillStyle = 'white';
+                ctx1.fillText(this.dayNo, 1008, 275);
+
+                // Season
+                const seasonMaxWidth = 900;
+                fontSize = 40;
+                // const splitSeasonText = this.seasonNo.split('').join(' ');
+                const seasonTextWidth = ctx1.measureText( this.seasonNo ).width;
+                // 横幅が最大幅を超える場合は、フォントサイズを調整
+                if (seasonTextWidth > seasonMaxWidth) {
+                    // 適当なフォントサイズに調整するロジックを追加
+                    fontSize = Math.floor(fontSize * (seasonMaxWidth / seasonTextWidth));
+                }
+                
+                ctx1.font = `bold ${fontSize}px 'Noto Sans JP', sans-serif`;
+                ctx1.fillStyle = '#332771';
+
+                const x = (295 + 1044 - ctx1.measureText( this.seasonNo ).width) / 2 + 1044 / 2;
+                ctx1.fillText(this.seasonNo, x, 126);
+                console.log('seasonTextWidth:' + seasonTextWidth);
+                console.log('x:' + x);
+
+                // 実況解説アイコン
+                const iconMaxSize = 211;
+                const iconTop = 68;
+                const commentaryImage = new Image();
+                if (this.logoImageCommentary && this.logoImageCommentary.type && this.logoImageCommentary.type.match('image/')) {
+                    commentaryImage.src = URL.createObjectURL(this.logoImageCommentary);
+                    commentaryImage.onload = () => {
+
+                        ctx1.drawImage(commentaryImage, 282 - 60, iconTop, iconMaxSize, iconMaxSize);
+                        URL.revokeObjectURL(commentaryImage.src);
+                        this.imageDataURL = canvas.toDataURL();
+                    }
+                }
+
+                const explanationImage = new Image();
+                if (this.logoImageExplanation && this.logoImageExplanation.type && this.logoImageExplanation.type.match('image/')) {
+                    explanationImage.src = URL.createObjectURL(this.logoImageExplanation);
+                    explanationImage.onload = () => {
+                        ctx1.drawImage(explanationImage, 1427 + 60, iconTop, iconMaxSize, iconMaxSize);
+                        URL.revokeObjectURL(explanationImage.src);
+                        this.imageDataURL = canvas.toDataURL();
+                    }
+                }
+
+
                 this.imageDataURL = canvas.toDataURL();
             }
         },
