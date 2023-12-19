@@ -239,7 +239,7 @@ export default {
 
             // チャート用データ
             labelData: [0, 0, 0, 0, 0, 0],
-            labels: ['打開', '抑え', 'ライン管理', '維持力', '突破力', '塗り'],
+            labels: ['打開', '抑え', 'ライン管理', 'ゲームスピード', '爆発力', '塗り'],
             chartData: null,
 
             // レンジ
@@ -280,6 +280,22 @@ export default {
     },
     created() {
         this.fillData()
+    },
+
+    mounted() {
+        if(localStorage.getItem('labels') != null) {
+            this.labels = JSON.parse(localStorage.getItem('labels'));
+        }
+    },
+
+    watch: {
+        labels: {
+            handler(){
+                console.log(this.labels);
+                localStorage.setItem('labels', JSON.stringify(this.labels));
+            },
+            deep : true,
+        }
     },
 
     computed: {
