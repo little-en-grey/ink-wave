@@ -1067,7 +1067,34 @@ export default {
                     } else {
                         this.defaultLogo = this.getDefaultLog(splitData[4])
                     }
+
+                    this.rankIcon = this.getRankIcon(splitData[47])
+                    this.inputBestWP = splitData[48]
+                    this.inputFinalWP = splitData[49]
+                    this.inputRank = splitData[50]
+                    this.inputSeason = splitData[51]
                 }
+            }
+        },
+
+        getRankIcon(rank) {
+            switch (rank) {
+                case 'クラーケン':
+                    return 1
+                case 'オルカ':
+                    return 2
+                case 'シャーク':
+                    return 3
+                case 'モレイ':
+                    return 4
+                case 'マンタ':
+                    return 5
+                case 'ペンギン':
+                    return 6
+                case 'ジェリーフィッシュ':
+                    return 7
+                default:
+                    return null
             }
         },
 
