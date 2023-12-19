@@ -285,6 +285,7 @@ export default {
     mounted() {
         if(localStorage.getItem('labels') != null) {
             this.labels = JSON.parse(localStorage.getItem('labels'));
+            this.fillData()
         }
     },
 
