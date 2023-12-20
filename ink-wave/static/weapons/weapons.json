@@ -402,5 +402,41 @@
     {
         "name": "ヒーローシューター レプリカ",
         "filename": "Shooter_Normal_H.png"
+    },
+    {
+        "name": "R-PEN/5B",
+        "filename": "Charger_Pencil_01.png"
+    },
+    {
+        "name": "ボトルガイザーフォイル",
+        "filename": "Shooter_Flash_01.png"
+    },
+    {
+        "name": "スパイガジェットソレーラ",
+        "filename": "Shelter_Compact_01.png"
+    },
+    {
+        "name": "フィンセント・ヒュー",
+        "filename": "Brush_Heavy_01.png"
+    },
+    {
+        "name": "LACT-450デコ",
+        "filename": "Stringer_Short_01.png"
+    },
+    {
+        "name": "S-BLAST91",
+        "filename": "Blaster_Precision_01.png"
+    },
+    {
+        "name": "ジムワイパー・ヒュー",
+        "filename": "Saber_Normal_01.png"
+    },
+    {
+        "name": "スプラマニューバーコラボ",
+        "filename": "Maneuver_Normal_01.png"
+    },
+    {
+        "name": "ホットブラスターカスタム",
+        "filename": "Blaster_Middle_01.png"
     }
 ]
