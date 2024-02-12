@@ -119,24 +119,17 @@
                 <v-card-actions>
                     <v-spacer />
                     <v-row>
-                        <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="red darken-3" @click="generateImageKraken">クラーケン用(ブキ無)</v-btn>
+                        <v-col cols="6" sm="3" md="2">
+                            <v-btn block color="red darken-3" @click="generateImageKraken">クラーケン用</v-btn>
                         </v-col>
-                        <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="red darken-3" @click="generateImageKrakenWithWeapon">クラーケン用(ブキ有)</v-btn>
+                        <v-col cols="6" sm="3" md="2">
+                            <v-btn block color="purple darken-4" @click="generateImageOrca">オルカ用</v-btn>
                         </v-col>
-                        <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="blue darken-2" @click="generateImageLeagueStart">リーグスタート用(ブキ無)</v-btn>
+                        <v-col cols="6" sm="3" md="2">
+                            <v-btn block color="blue darken-2" @click="generateImageLeagueStart">リーグスタート用</v-btn>
                         </v-col>
-                        <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="blue darken-2"
-                                @click="generateImageLeagueStartWithWeapon">リーグスタート用(ブキ有)</v-btn>
-                        </v-col>
-                        <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="secondary" @click="generateImageFinish">シーズン終了証書(ブキ無)</v-btn>
-                        </v-col>
-                        <v-col cols="6" sm="4" md="2">
-                            <v-btn block color="secondary" @click="generateImageFinishWithWeapon">シーズン終了証書(ブキ有)</v-btn>
+                        <v-col cols="6" sm="3" md="2">
+                            <v-btn block color="secondary" @click="generateImageFinish">シーズン終了証書</v-btn>
                         </v-col>
                     </v-row>
                 </v-card-actions>
@@ -224,12 +217,10 @@ export default {
             canvasHeight: 1080,                 // キャンバスの高さ
 
             // カードテンプレート
-            imageKraken: '/ink-wave/team_card/team_slide_kraken.png',                                   // クラーケン用(ブキ無)
-            imageKrakenWithWeapon: '/ink-wave/team_card/team_slide_kraken_weapon.png',                  // クラーケン用(ブキ有)
-            imageUrlLeagueStart: '/ink-wave/team_card/team_slide_league_start.png',                     // リーグスタート用(ブキ無)
-            imageUrlLeagueStartWithWeapon: '/ink-wave/team_card/team_slide_league_start_weapon.png',    // リーグスタート用(ブキ有)
-            imageFinish: '/ink-wave/team_card/team_slide_finish.png',                                   // シーズン終了証書(ブキ無)
-            imageFinishWithWeapon: '/ink-wave/team_card/team_slide_finish_weapon.png',               // シーズン終了証書(ブキ有)
+            imageKraken: '/ink-wave/team_card/team_slide_kraken.png',                  // クラーケン用
+            imageOrca: '/ink-wave/team_card/team_slide_orca.png',                  // オルカ用
+            imageUrlLeagueStart: '/ink-wave/team_card/team_slide_league_start.png',    // リーグスタート用
+            imageFinish: '/ink-wave/team_card/team_slide_finish.png',               // シーズン終了証書
 
             // フォルダパス
             roleIconPath: '/ink-wave/role_icon/',       // ロールアイコン
@@ -283,7 +274,7 @@ export default {
     },
 
     mounted() {
-        if(localStorage.getItem('labels') != null) {
+        if (localStorage.getItem('labels') != null) {
             this.labels = JSON.parse(localStorage.getItem('labels'));
             this.fillData()
         }
@@ -291,11 +282,11 @@ export default {
 
     watch: {
         labels: {
-            handler(){
+            handler() {
                 console.log(this.labels);
                 localStorage.setItem('labels', JSON.stringify(this.labels));
             },
-            deep : true,
+            deep: true,
         }
     },
 
@@ -351,7 +342,8 @@ export default {
                 ]
             }
         },
-        // クラーケン用(ブキ無)
+
+        // クラーケン用
         generateImageKraken() {
             const canvas = this.$refs.imageCanvas;
             const radarCanvas = document.querySelector('#test canvas');
@@ -364,119 +356,6 @@ export default {
 
             const baseImage = new Image();
             baseImage.src = this.imageKraken;
-
-            baseImage.onload = () => {
-                ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
-                ctx1.drawImage(ctx2.canvas, 1187 + 60, 315 + 74 - 20, radarCanvas.width, radarCanvas.height); // radarCanvasではなくctx2.canvasを使用
-
-                // Draw text
-                ctx1.fillStyle = 'white';
-
-                // チームロゴ
-                const maxWidth = 380;
-                const maxHeight = 380;
-                const landing = 55;
-                const top = 50;
-                const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
-                    } else {
-                        logo.src = this.selectLogo;
-                    }
-
-                    logo.onload = () => {
-                        let logoWidth = maxWidth;
-                        let logoHeight = maxHeight;
-                        // 比率が1:1の場合
-                        if (logo.width === logo.height) {
-                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
-                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
-                        } else if (logo.width > logo.height) { // ヨコが長い
-                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
-                            const ratio = logo.width / logoWidth;
-                            logoHeight = logo.height / ratio;
-                        } else { // タテが長い
-                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
-                            const ratio = logo.height / logoHeight;
-                            logoWidth = logo.width / ratio;
-                        }
-
-                        const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
-                        const y = (maxHeight + top - logoHeight) / 2 + top / 2;
-                        ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
-                        this.imageDataURL = canvas.toDataURL();
-                    }
-                }
-
-                // TEAM
-                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputTeamName, 512, 123);
-
-                // MEMBER
-                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
-                this.inputPlayerName.forEach(function (name, index) {
-                    ctx1.fillText(name, 86, 563 + (index * 106));
-                })
-
-                // RANGE
-                const self = this;
-                this.selectRange.forEach(function (rangeId, index) {
-                    const range = self.rangeData.find(item => item.id === rangeId);
-                    const left = 398;
-                    const x = (220 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
-                    ctx1.fillText(range.name, x, 560 + (index * 106));
-                })
-
-                // ROLE
-                this.selectRole.forEach(function (roleTag, index) {
-                    const role = self.roleData.find(item => item.tag === roleTag);
-                    ctx1.fillText(role.name, 762, 560 + (index * 106));
-                    const roleIcon = new Image();
-                    roleIcon.src = self.roleIconPath + roleTag + '.png';
-                    roleIcon.onload = () => {
-                        ctx1.drawImage(roleIcon, 710, 525 + (index * 106), 50, 50);
-                        self.imageDataURL = canvas.toDataURL();
-                    }
-                })
-
-                // 実績
-                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
-                this.inputAchievements.forEach(function (achievements, index) {
-                    ctx1.fillText(achievements, 1208, 115 + (index * 60));
-                })
-
-                // COMMENT
-                ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
-                const n2Array = this.inputComment.split('\n');
-                const lines = [];
-                const lineHeight = 50;
-                n2Array.forEach((element) => {
-                    for (let i = 0; i < element.length; i += 29) {
-                        lines.push(element.slice(i, i + 29));
-                    }
-                });
-
-                for (let i = 0; i < (lines.length > 5 ? 5 : lines.length); i++) {
-                    ctx1.fillText(lines[i], 509, 239 + (i * lineHeight));
-                }
-                this.imageDataURL = canvas.toDataURL();
-            }
-        },
-        // クラーケン用(ブキ有)
-        generateImageKrakenWithWeapon() {
-            const canvas = this.$refs.imageCanvas;
-            const radarCanvas = document.querySelector('#test canvas');
-
-            if (!canvas || !canvas.getContext) return false;
-            if (!radarCanvas || !radarCanvas.getContext) return false;
-
-            const ctx1 = canvas.getContext('2d');
-            const ctx2 = radarCanvas.getContext('2d');
-
-            const baseImage = new Image();
-            baseImage.src = this.imageKrakenWithWeapon;
 
             baseImage.onload = () => {
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
@@ -591,26 +470,33 @@ export default {
                 this.imageDataURL = canvas.toDataURL();
             }
         },
-        // リーグスタート用(ブキ無)
-        generateImageLeagueStart() {
+
+        // オルカ用
+        generateImageOrca() {
             const canvas = this.$refs.imageCanvas;
+            const radarCanvas = document.querySelector('#test canvas');
+
             if (!canvas || !canvas.getContext) return false;
+            if (!radarCanvas || !radarCanvas.getContext) return false;
 
             const ctx1 = canvas.getContext('2d');
+            const ctx2 = radarCanvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.imageUrlLeagueStart;
+            baseImage.src = this.imageOrca;
 
             baseImage.onload = () => {
-                canvas.width = this.canvasWidth; // Canvasの幅を設定
-                canvas.height = this.canvasHeight; // Canvasの高さを設定
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
+                ctx1.drawImage(ctx2.canvas, 1187 + 60 + 15, 315 + 74 - 20, radarCanvas.width, radarCanvas.height); // radarCanvasではなくctx2.canvasを使用
+
+                // Draw text
+                ctx1.fillStyle = 'white';
 
                 // チームロゴ
-                const maxWidth = 585;
-                const maxHeight = 585;
-                const landing = 50;
-                const top = 272;
+                const maxWidth = 380;
+                const maxHeight = 380;
+                const landing = 55;
+                const top = 50;
                 const logo = new Image();
                 if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
                     if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
@@ -644,51 +530,84 @@ export default {
                     }
                 }
 
-                ctx1.fillStyle = 'white';
-
                 // TEAM
-                ctx1.font = "bold 60px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputTeamName, 732, 280);
+                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
+                ctx1.fillText(this.inputTeamName, 512, 123);
 
                 // MEMBER
-                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
+                ctx1.font = "bold 26px 'Noto Sans JP', sans-serif";
                 this.inputPlayerName.forEach(function (name, index) {
-                    ctx1.fillText(name, 719, 423 + (index * 106));
+                    ctx1.fillText(name, 86, 563 + (index * 106));
                 })
 
                 // RANGE
                 const self = this;
                 this.selectRange.forEach(function (rangeId, index) {
                     const range = self.rangeData.find(item => item.id === rangeId);
-                    const left = 1034;
-                    const x = (220 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
-                    ctx1.fillText(range.name, x, 421 + (index * 106));
+                    const left = 378;
+                    const x = (180 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
+                    ctx1.fillText(range.name, x, 563 + (index * 106));
                 })
 
                 // ROLE
                 this.selectRole.forEach(function (roleTag, index) {
                     const role = self.roleData.find(item => item.tag === roleTag);
-                    ctx1.fillText(role.name, 1395, 421 + (index * 106));
+                    ctx1.fillText(role.name, 617, 563 + (index * 106));
                     const roleIcon = new Image();
                     roleIcon.src = self.roleIconPath + roleTag + '.png';
                     roleIcon.onload = () => {
-                        ctx1.drawImage(roleIcon, 1348, 384 + (index * 106), 50, 50);
+                        ctx1.drawImage(roleIcon, 565, 527 + (index * 106), 50, 50);
                         self.imageDataURL = canvas.toDataURL();
                     }
                 })
+
+                // 使用ブキ
+                for (const key in this.selectPlayerWeapons) {
+                    const weapons = this.selectPlayerWeapons[key];
+                    weapons.forEach(function (fileName, index) {
+                        const icon = new Image();
+                        icon.src = self.weaponsIconPath + fileName;
+                        icon.onload = () => {
+                            ctx1.drawImage(icon, 924 + (index * 80), 510 + (key * 106), 75, 75);
+                            self.imageDataURL = canvas.toDataURL();
+                        }
+                    })
+                }
+
+                // 実績
+                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
+                this.inputAchievements.forEach(function (achievements, index) {
+                    ctx1.fillText(achievements, 1238, 115 + (index * 60));
+                })
+
+                // COMMENT
+                ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
+                const n2Array = this.inputComment.split('\n');
+                const lines = [];
+                const lineHeight = 50;
+                n2Array.forEach((element) => {
+                    for (let i = 0; i < element.length; i += 29) {
+                        lines.push(element.slice(i, i + 29));
+                    }
+                });
+
+                for (let i = 0; i < (lines.length > 5 ? 5 : lines.length); i++) {
+                    ctx1.fillText(lines[i], 509, 239 + (i * lineHeight));
+                }
+
+                this.imageDataURL = canvas.toDataURL();
             }
-            this.imageDataURL = canvas.toDataURL();
         },
 
-        // リーグスタート用(ブキ有)
-        generateImageLeagueStartWithWeapon() {
+        // リーグスタート用
+        generateImageLeagueStart() {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
 
             const ctx1 = canvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.imageUrlLeagueStartWithWeapon;
+            baseImage.src = this.imageUrlLeagueStart;
 
             baseImage.onload = () => {
                 canvas.width = this.canvasWidth; // Canvasの幅を設定
@@ -782,136 +701,14 @@ export default {
             this.imageDataURL = canvas.toDataURL();
         },
 
-        // シーズン終了証書(ブキ無)
+        // シーズン終了証書
         generateImageFinish() {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
-
             const ctx1 = canvas.getContext('2d');
 
             const baseImage = new Image();
             baseImage.src = this.imageFinish;
-
-            baseImage.onload = () => {
-                ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
-
-                // Draw text
-                ctx1.fillStyle = 'white';
-
-                // チームロゴ
-                const maxWidth = 470;
-                const maxHeight = 470;
-                const landing = 143;
-                const top = 207;
-
-                const logo = new Image();
-                if ((this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) || this.defaultLogo) {
-                    if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) {
-                        logo.src = URL.createObjectURL(this.logoImage); // ファイルからURLを生成
-                    } else {
-                        logo.src = this.selectLogo;
-                    }
-
-                    logo.onload = () => {
-                        let logoWidth = maxWidth;
-                        let logoHeight = maxHeight;
-                        // 比率が1:1の場合
-                        if (logo.width === logo.height) {
-                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
-                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
-                        } else if (logo.width > logo.height) { // ヨコが長い
-                            logoWidth = logo.width <= maxWidth ? logo.width : maxWidth;
-                            const ratio = logo.width / logoWidth;
-                            logoHeight = logo.height / ratio;
-                        } else { // タテが長い
-                            logoHeight = logo.height <= maxHeight ? logo.height : maxHeight;
-                            const ratio = logo.height / logoHeight;
-                            logoWidth = logo.width / ratio;
-                        }
-
-                        const x = (maxWidth + landing - logoWidth) / 2 + landing / 2;
-                        const y = (maxHeight + top - logoHeight) / 2 + top / 2;
-                        ctx1.drawImage(logo, x, y, logoWidth, logoHeight);
-                        if (this.logoImage && this.logoImage.type && this.logoImage.type.match('image/')) URL.revokeObjectURL(logo.src); // 不要になったURLを解放
-                        this.imageDataURL = canvas.toDataURL();
-
-                        // ランクアイコン
-                        if (this.rankIcon) {
-                            const icon = new Image();
-                            icon.src = this.selectRankIcon;
-                            icon.onload = () => {
-                                ctx1.drawImage(icon, 243, 673, 270, 270);
-
-                                // 順位
-                                ctx1.font = "bold 20px 'Noto Sans JP', sans-serif";
-                                const left = 363;
-                                const x = (29 + left - ctx1.measureText(this.inputRank).width) / 2 + left / 2;
-                                ctx1.fillText(this.inputRank, x, 886);
-
-                                this.imageDataURL = canvas.toDataURL();
-                            }
-                        }
-                    }
-                }
-
-                // TEAM
-                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
-                ctx1.fillText(this.inputTeamName, 715, 230);
-
-                // MEMBER
-                ctx1.font = "bold 28px 'Noto Sans JP', sans-serif";
-                this.inputPlayerName.forEach(function (name, index) {
-                    ctx1.fillText(name, 739, 377 + (index * 106));
-                })
-
-                // RANGE
-                const self = this;
-                this.selectRange.forEach(function (rangeId, index) {
-                    const range = self.rangeData.find(item => item.id === rangeId);
-                    const left = 1033;
-                    const x = (220 + left - ctx1.measureText(range.name).width) / 2 + left / 2;
-                    ctx1.fillText(range.name, x, 374 + (index * 106));
-                })
-
-                // ROLE
-                this.selectRole.forEach(function (roleTag, index) {
-                    const role = self.roleData.find(item => item.tag === roleTag);
-                    ctx1.fillText(role.name, 1395, 374 + (index * 106));
-                    const roleIcon = new Image();
-                    roleIcon.src = self.roleIconPath + roleTag + '.png';
-                    roleIcon.onload = () => {
-                        ctx1.drawImage(roleIcon, 1343, 339 + (index * 106), 50, 50);
-                        self.imageDataURL = canvas.toDataURL();
-                    }
-                })
-
-                // 最高WP
-                ctx1.font = "bold 50px 'Noto Sans JP', sans-serif";
-                let left = 174 + 33;
-                let x = (155 + left - ctx1.measureText(this.inputBestWP).width) / 2 + left / 2;
-                ctx1.fillText(this.inputBestWP, x, 170);
-
-                // 最終WP
-                left = 359 + 33;
-                x = (159 + left - ctx1.measureText(this.inputFinalWP).width) / 2 + left / 2;
-                ctx1.fillText(this.inputFinalWP, x, 170);
-
-                // シーズン
-                ctx1.font = "58px 'Lato', sans-serif";
-                ctx1.fillText(this.inputSeason, 1180, 962);
-
-                this.imageDataURL = canvas.toDataURL();
-            }
-        },
-
-        // シーズン終了証書(ブキ有)
-        generateImageFinishWithWeapon() {
-            const canvas = this.$refs.imageCanvas;
-            if (!canvas || !canvas.getContext) return false;
-            const ctx1 = canvas.getContext('2d');
-
-            const baseImage = new Image();
-            baseImage.src = this.imageFinishWithWeapon;
 
             baseImage.onload = () => {
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
