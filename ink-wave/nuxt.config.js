@@ -101,4 +101,7 @@ export default {
   router: {
     base: '/ink-wave/'
   },
+  generate: {
+    dir: '../docs'
+  },
 }
