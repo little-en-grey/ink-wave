@@ -102,6 +102,8 @@
                 <v-card-actions>
                     <v-spacer />
                     <v-btn color="primary" @click="generateImage"> スライド作成 </v-btn>
+                    <v-btn color="red darken-3" @click="generateImage(1)"> プレイオフ作成 </v-btn>
+                    <v-btn color="purple darken-4" @click="generateImage(2)"> ワイルドカード作成 </v-btn>
                 </v-card-actions>
             </v-card>
             <v-card v-show="imageDataURL" class="pt-1 pr-1 pl-1">
@@ -161,6 +163,8 @@ export default {
             imageDataURL: null,
             imageName: 'generated_image.png',
             baseImageUrl: '/ink-wave/todays_result/todays_result.jpg', // ベース画像のURLを設定
+            baseImageUrlKraken: '/ink-wave/todays_result/todays_result_PLAYOFF.jpg', // ベース画像のURLを設定
+            baseImageUrlOrca: '/ink-wave/todays_result/todays_result_WILDCARD.jpg', // ベース画像のURLを設定
             // baseImageUrl: '/ink-wave/todays_result/todays_result_sample.jpg', // ベース画像のURLを設定
             defaultLogoPath: '/ink-wave/default_logo/',
             canvasWidth: 1920, // キャンバスの幅
@@ -199,13 +203,26 @@ export default {
     },
 
     methods: {
-        generateImage() {
+        generateImage(type = 0) {
             const canvas = this.$refs.imageCanvas;
             if (!canvas || !canvas.getContext) return false;
             const ctx1 = canvas.getContext('2d');
 
             const baseImage = new Image();
-            baseImage.src = this.baseImageUrl;
+            switch(type) {
+                case 0:
+                    baseImage.src = this.baseImageUrl;
+                    break;
+                case 1:
+                    baseImage.src = this.baseImageUrlKraken;
+                    break;
+                case 2:
+                    baseImage.src = this.baseImageUrlOrca;
+                    break;
+                default:
+                    baseImage.src = this.baseImageUrl;
+                    break;
+            }
 
             baseImage.onload = () => {
                 ctx1.drawImage(baseImage, 0, 0, this.canvasWidth, this.canvasHeight);
@@ -341,11 +358,6 @@ export default {
                     this.inputTeamNameA = splitDataA[1]
                     this.inputPlayerNameA.push(splitDataA[5], splitDataA[11], splitDataA[16], splitDataA[21])
 
-                    // スーパーサブの追加
-                    // if (splitDataA[26] === 'はい') {
-                    //     this.inputPlayerNameA.push(splitDataA[27])
-                    // }
-
                     if (splitDataA[3] !== "") {
                         // this.logoImageA = splitData[3]
                     } else {
@@ -361,11 +373,6 @@ export default {
                 if (splitDataB.length > 31) {
                     this.inputTeamNameB = splitDataB[1]
                     this.inputPlayerNameB.push(splitDataB[5], splitDataB[11], splitDataB[16], splitDataB[21])
-
-                    // スーパーサブの追加
-                    // if (splitDataB[26] === 'はい') {
-                    //     this.inputPlayerNameB.push(splitDataB[27])
-                    // }
 
                     if (splitDataB[3] !== "") {
                         // this.logoImageB = splitData[3]
