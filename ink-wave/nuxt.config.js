@@ -45,6 +45,7 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/google-gtag',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -103,5 +104,10 @@ export default {
   },
   generate: {
     dir: '../docs'
+  },
+
+  'google-gtag': {
+    id: 'G-L96NEPWVLK',
+    debug: true
   },
 }
