@@ -1,27 +1,28 @@
+
 <template>
-  <v-app dark>
-    <v-app-bar fixed app>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
-    </v-main>
-    <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
-  </v-app>
+    <v-app>
+        <v-app-bar fixed app>
+            <v-toolbar-title>{{ pageTitle }}</v-toolbar-title>
+        </v-app-bar>
+        <v-main>
+            <v-container>
+                <slot />
+            </v-container>
+        </v-main>
+        <v-footer app>
+            <span>&copy; {{ new Date().getFullYear() }} {{ pageTitle }}</span>
+        </v-footer>
+    </v-app>
 </template>
 
-<script>
-export default {
-  name: 'DefaultLayout',
-  data() {
-    return {
-      fixed: false,
-      title: 'INK WAVE',
-    }
-  },
-}
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useTheme } from 'vuetify'
+
+const pageTitle = ref('INK WAVE')
+const darkTheme = ref(true)
+const theme = useTheme()
+
+theme.global.name.value = darkTheme.value ? 'dark' : 'light'
+
 </script>
