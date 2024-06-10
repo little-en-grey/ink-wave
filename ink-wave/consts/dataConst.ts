@@ -1,8 +1,8 @@
 // ファイルパス
-export const TEAM_IMAGE_KRAKEN = '/ink-wave-test/team_card/team_slide_kraken.png'
-export const TEAM_IMAGE_ORCA = '/ink-wave-test/team_card/team_slide_orca.png'
-export const TEAM_IMAGE_FINISH = '/ink-wave-test/team_card/team_slide_finish.png'
-export const TEAM_IMAGE_START = '/ink-wave-test/team_card/team_slide_league_start.png'
+export const TEAM_IMAGE_KRAKEN = '/ink-wave/team_card/team_slide_kraken.png'
+export const TEAM_IMAGE_ORCA = '/ink-wave/team_card/team_slide_orca.png'
+export const TEAM_IMAGE_FINISH = '/ink-wave/team_card/team_slide_finish.png'
+export const TEAM_IMAGE_START = '/ink-wave/team_card/team_slide_league_start.png'
 
 
 // デフォルトロゴ

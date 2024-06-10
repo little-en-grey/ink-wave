@@ -95,6 +95,10 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+    title: 'Profile Maker',
+})
+
 import { ref } from 'vue'
 
 const inputName = ref('')
@@ -144,7 +148,7 @@ const dateData = ref([
 ])
 const imageDataURL = ref(null)
 const imageName = ref('generated_image.png')
-const baseImageUrl = ref('/ink-wave-test/card.png')
+const baseImageUrl = ref('/ink-wave/card.png')
 const canvasWidth = ref(1080)
 const canvasHeight = ref(1920)
 const canvas = ref()

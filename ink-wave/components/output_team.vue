@@ -35,9 +35,9 @@
                                         label="Name"></v-text-field>
                                 </v-col>
                                 <v-col cols="6">
-                                    <v-select v-model="selectPlayerWeapons[i - 1]" :items="allWeaponsData" item-title="name"
-                                        item-value="filename" density="compact" chips multiple label="Weapons"
-                                        :menu-props="menuProps"></v-select>
+                                    <v-select v-model="selectPlayerWeapons[i - 1]" :items="allWeaponsData"
+                                        item-title="name" item-value="filename" density="compact" chips multiple
+                                        label="Weapons" :menu-props="menuProps"></v-select>
                                 </v-col>
                                 <v-col cols="6">
                                     <v-select v-model="selectRange[i - 1]" :items="rangeData" item-title="name"
@@ -57,7 +57,8 @@
                         </v-col>
                         <v-col cols="3">
                             <v-select v-model="defaultLogo" :items="logoData" item-title="name" item-value="id"
-                                density="compact" label="Default Logo" :disabled="Array.isArray(logoImage) && logoImage[0] !== undefined"></v-select>
+                                density="compact" label="Default Logo"
+                                :disabled="Array.isArray(logoImage) && logoImage[0] !== undefined"></v-select>
                         </v-col>
                         <v-col cols="1">
                             <v-img v-if="defaultLogo" :src="selectLogo!" max-height="50" max-width="50"></v-img>
@@ -112,7 +113,7 @@
                             <v-text-field v-model="labelData[index]" :label="label" @change="fillData"></v-text-field>
                         </v-col>
                         <v-col cols="12">
-                            <RadarChart :chartData="chartData" class="chart-container"/>
+                            <RadarChart :chartData="chartData" class="chart-container" />
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -150,7 +151,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import * as DataConst from "@/consts/dataConst";
-import {WEAPONS} from "@/consts/weaponsConst";
+import { WEAPONS } from "@/consts/weaponsConst";
 import RadarChart from "@/components/radar_chart.vue";
 
 const allWeaponsData = WEAPONS.sort((a, b) => {
@@ -165,6 +166,8 @@ const allWeaponsData = WEAPONS.sort((a, b) => {
     }
     return 0;
 })
+
+const tab = ref(null)
 const inputPlayerName = ref([])
 const selectPlayerWeapons = ref({})
 const selectRange = ref([])
@@ -190,10 +193,10 @@ const canvasWidth = ref(1920)
 const canvasHeight = ref(1080)
 
 // フォルダパス
-const roleIconPath = ref('/ink-wave-test/role_icon/')
-const defaultLogoPath = ref('/ink-wave-test/default_logo/')
-const rankIconPath = ref('/ink-wave-test/rank_icon/')
-const weaponsIconPath = ref('/ink-wave-test/weapons/')
+const roleIconPath = ref('/ink-wave/role_icon/')
+const defaultLogoPath = ref('/ink-wave/default_logo/')
+const rankIconPath = ref('/ink-wave/rank_icon/')
+const weaponsIconPath = ref('/ink-wave/weapons/')
 
 const rangeData = DataConst.RANGE
 const roleData = DataConst.ROLE
@@ -840,7 +843,7 @@ const inputData = (): void => {
     }
 }
 
-const getRankIcon = (rank: string):number | null => {
+const getRankIcon = (rank: string): number | null => {
     switch (rank) {
         case 'クラーケン':
             return 1
@@ -861,7 +864,7 @@ const getRankIcon = (rank: string):number | null => {
     }
 }
 
-const getRange = (range: string):number | null => {
+const getRange = (range: string): number | null => {
     switch (range) {
         case 'SHORT':
             return 1
@@ -874,7 +877,7 @@ const getRange = (range: string):number | null => {
     }
 }
 
-const getRole = (role: string):string | null => {
+const getRole = (role: string): string | null => {
     switch (role) {
         case 'アタッカー':
             return 'attack'
@@ -893,7 +896,7 @@ const getRole = (role: string):string | null => {
     }
 }
 
-const getDefaultLog = (logo: string):number | null => {
+const getDefaultLog = (logo: string): number | null => {
     switch (logo) {
         case 'ブルー':
             return 1
@@ -908,7 +911,7 @@ const getDefaultLog = (logo: string):number | null => {
     }
 }
 
-const getWeapon = (value: string):string | null => {
+const getWeapon = (value: string): string | null => {
     const data = allWeaponsData.find(weapon => weapon.name === value);
     if (data) {
         return data.filename
