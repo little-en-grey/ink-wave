@@ -306,10 +306,17 @@ const generateImageKraken = async (): Promise<Boolean> => {
 
     let issetImage = Array.isArray(logoImage.value) && logoImage.value[0] !== undefined
 
+    const size = 580;
     baseImage.onload = () => {
-        ctx1.drawImage(baseImage, 0, 0, canvasWidth.value, canvasHeight.value);
-        ctx1.drawImage(ctx2.canvas, 1187 + 60 + 15, 315 + 74 - 20, radarCanvas.value.width, radarCanvas.value.height); // radarCanvasではなくctx2.canvasを使用
+        // 描画サイズ修正（ちょっと強引）
+        const resizeWidth = radarCanvas.value.width - size;
+        const resizeHeight = radarCanvas.value.height - size;
 
+        ctx1.drawImage(baseImage, 0, 0, canvasWidth.value, canvasHeight.value);
+        ctx1.drawImage(ctx2.canvas, 1187 + 60 + 15, 315 + 74 - 20, radarCanvas.value.width - resizeWidth, radarCanvas.value.height - resizeHeight); // radarCanvasではなくctx2.canvasを使用
+
+        console.log(radarCanvas.value.width);
+        console.log(radarCanvas.value.height);
         // Draw text
         ctx1.fillStyle = 'white';
 
