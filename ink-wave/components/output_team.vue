@@ -177,6 +177,8 @@ const inputComment = ref('')
 const inputAchievements = ref([])
 const inputEntryLine = ref('')
 
+const teamId = ref(null)
+
 const inputFinalWP = ref('')
 const inputBestWP = ref('')
 const inputRank = ref('')
@@ -805,10 +807,13 @@ const inputData = (): void => {
         selectRole.value = []
 
         if (splitData.length > 31) {
+            teamId.value = splitData[0]
             inputTeamName.value = splitData[1]
             inputPlayerName.value.push(splitData[5], splitData[11], splitData[16], splitData[21])
             selectRange.value.push(getRange(splitData[9]), getRange(splitData[14]), getRange(splitData[19]), getRange(splitData[24]))
             selectRole.value.push(getRole(splitData[10]), getRole(splitData[15]), getRole(splitData[20]), getRole(splitData[25]))
+
+            imageName.value = teamId.value + '_' + inputTeamName.value + '_修了証書.png'
 
             // スーパーサブの追加
             if (splitData[27] !== '') {
