@@ -556,7 +556,7 @@ export const WEAPONS = [
         'filename': 'Path_Wst_Charger_Light_01.png'
     },
     {
-        'name': 'イグザミナーヒュー',
+        'name': 'イグザミナー・ヒュー',
         'filename': 'Path_Wst_Spinner_HyperShort_01.png'
     },
     {
