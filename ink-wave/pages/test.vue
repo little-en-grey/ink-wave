@@ -8,17 +8,17 @@
         <v-tabs-window-item>
             <OutputTeam v-if="tab == 1" />
             <TodaysResult v-if="tab == 2" />
-            <TodaysResult2  v-if="tab == 3" />
+            <TodaysResult2 v-if="tab == 3" />
         </v-tabs-window-item>
     </v-tabs-window>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import OutputTeam from "@/components/test/output_team.vue";
-import TodaysResult from "@/components/test/todays_result.vue";
-import TodaysResult2 from "@/components/test/todays_result2.vue";
-import {LOGO_DATA} from "@/consts/dataConst";
+import OutputTeam from "@/components/output_team.vue";
+import TodaysResult from "@/components/todays_result.vue";
+import TodaysResult2 from "@/components/todays_result2.vue";
+import { LOGO_DATA } from "@/consts/dataConst";
 
 const tab = ref(0)
 
@@ -35,16 +35,5 @@ onMounted(() => {
 .confirm-image {
     width: 100%;
     height: auto;
-}</style>
-
-
-
-
-
-
-
-
-
-
-
-
+}
+</style>

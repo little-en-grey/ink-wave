@@ -177,7 +177,7 @@ const inputComment = ref('')
 const inputAchievements = ref([])
 const inputEntryLine = ref('')
 
-const teamId = ref(null)
+const teamId = ref('')
 
 const inputFinalWP = ref('')
 const inputBestWP = ref('')
@@ -185,6 +185,7 @@ const inputRank = ref('')
 const inputSeason = ref('')
 
 const logoImage = ref()
+const customeLogo = ref()
 const defaultLogo = ref()
 const rankIcon = ref()
 
@@ -256,6 +257,7 @@ onMounted(() => {
     if (localStorage.getItem('labels') != null) {
         labels.value = JSON.parse(localStorage.getItem('labels')!);
     }
+    setQueryParam()
 })
 
 watch(
@@ -684,8 +686,10 @@ const generateImageFinish = async (): Promise<Boolean> => {
 
         const logo = new Image();
         let issetImage = Array.isArray(logoImage.value) && logoImage.value[0] !== undefined
-        if ((issetImage && logoImage.value && logoImage.value[0].type && logoImage.value[0].type.match('image/')) || defaultLogo.value) {
-            if (issetImage && logoImage.value && logoImage.value[0].type && logoImage.value[0].type.match('image/')) {
+        if ((issetImage && logoImage.value && logoImage.value[0].type && logoImage.value[0].type.match('image/')) || defaultLogo.value || customeLogo.value) {
+            if (customeLogo.value) {
+                logo.src = customeLogo.value;
+            } else if (issetImage && logoImage.value && logoImage.value[0].type && logoImage.value[0].type.match('image/')) {
                 logo.src = URL.createObjectURL(logoImage.value[0]); // ファイルからURLを生成
             } else {
                 logo.src = selectLogo.value;
@@ -855,22 +859,103 @@ const inputData = (): void => {
     }
 }
 
+const setQueryParam = (): void => {
+    try {
+        inputPlayerName.value = []
+        selectPlayerWeapons.value = []
+        selectRange.value = []
+        selectRole.value = []
+
+        teamId.value = useRoute().query.team_id ? String(useRoute().query.team_id) : '';
+        inputTeamName.value = useRoute().query.team_name ? String(useRoute().query.team_name) : '';
+
+        if (useRoute().query.player1) {
+            const player1 = String(useRoute().query.player1).split(',')
+            console.log(player1)
+            inputPlayerName.value.push(player1[0])
+            selectRange.value.push(getRange(player1[1]))
+            selectRole.value.push(getRole(player1[2]))
+            selectPlayerWeapons.value[0] = [];
+            selectPlayerWeapons.value[0].push(getWeapon(player1[3]), getWeapon(player1[4]), getWeapon(player1[5]))
+        }
+        if (useRoute().query.player2) {
+            const player2 = String(useRoute().query.player2).split(',')
+            console.log(player2)
+            inputPlayerName.value.push(player2[0])
+            selectRange.value.push(getRange(player2[1]))
+            selectRole.value.push(getRole(player2[2]))
+            selectPlayerWeapons.value[1] = [];
+            selectPlayerWeapons.value[1].push(getWeapon(player2[3]), getWeapon(player2[4]), getWeapon(player2[5]))
+        }
+        if (useRoute().query.player3) {
+            const player3 = String(useRoute().query.player3).split(',')
+            console.log(player3)
+            inputPlayerName.value.push(player3[0])
+            selectRange.value.push(getRange(player3[1]))
+            selectRole.value.push(getRole(player3[2]))
+            selectPlayerWeapons.value[2] = [];
+            selectPlayerWeapons.value[2].push(getWeapon(player3[3]), getWeapon(player3[4]), getWeapon(player3[5]))
+        }
+        if (useRoute().query.player4) {
+            const player4 = String(useRoute().query.player4).split(',')
+            console.log(player4)
+            inputPlayerName.value.push(player4[0])
+            selectRange.value.push(getRange(player4[1]))
+            selectRole.value.push(getRole(player4[2]))
+            selectPlayerWeapons.value[3] = [];
+            selectPlayerWeapons.value[3].push(getWeapon(player4[3]), getWeapon(player4[4]), getWeapon(player4[5]))
+        }
+        if (useRoute().query.player5) {
+            const player5 = String(useRoute().query.player5).split(',')
+            console.log(player5)
+            inputPlayerName.value.push(player5[0])
+            selectRange.value.push(getRange(player5[1]))
+            selectRole.value.push(getRole(player5[2]))
+            selectPlayerWeapons.value[4] = [];
+            selectPlayerWeapons.value[4].push(getWeapon(player5[3]), getWeapon(player5[4]), getWeapon(player5[5]))
+        }
+
+        rankIcon.value = useRoute().query.rank_icon ? getRankIcon(String(useRoute().query.rank_icon)) : null;
+        inputBestWP.value = useRoute().query.best_wp ? String(useRoute().query.best_wp) : '';
+        inputFinalWP.value = useRoute().query.final_wp ? String(useRoute().query.final_wp) : '';
+        inputRank.value = useRoute().query.rank ? String(useRoute().query.rank) : '';
+        inputSeason.value = useRoute().query.season ? String(useRoute().query.season) : '';
+        if (useRoute().query.custome_logo) {
+            customeLogo.value = useRoute().query.custome_logo ? '/ink-wave/team_logo/' + teamId.value + '.jpg' : null;
+            defaultLogo.value = '';
+        } else {
+            customeLogo.value = '';
+            defaultLogo.value = useRoute().query.default_logo ? getDefaultLog(String(useRoute().query.default_logo)) : null;
+        }
+
+        imageName.value = teamId.value + '_' + inputTeamName.value + '_修了証書.png'
+        generateImageFinish();
+    } catch (e) {
+        console.log(e)
+    }
+
+}
+
 const getRankIcon = (rank: string): number | null => {
     switch (rank) {
         case 'クラーケン':
             return 1
         case 'オルカ':
             return 2
-        case 'シャーク':
+        case 'ホエール':
             return 3
-        case 'モレイ':
+        case 'シャーク':
             return 4
-        case 'マンタ':
+        case 'モレイ':
             return 5
-        case 'ペンギン':
+        case 'マンタ':
             return 6
-        case 'ジェリーフィッシュ':
+        case 'タートル':
             return 7
+        case 'ペンギン':
+            return 8
+        case 'ジェリーフィッシュ':
+            return 9
         default:
             return null
     }
