@@ -570,5 +570,125 @@ export const WEAPONS = [
     {
         'name': 'ハイドラントカスタム',
         'filename': 'Path_Wst_Spinner_Hyper_01.png'
+    },
+    {
+        'name': 'シャープマーカーGECK',
+        'filename': 'Path_Wst_Shooter_Precision_02.png'
+    },
+    {
+        'name': 'プロモデラー彩',
+        'filename': 'Path_Wst_Shooter_Blaze_02.png'
+    },
+    {
+        'name': 'スプラシューター煌',
+        'filename': 'Path_Wst_Shooter_Normal_02.png'
+    },
+    {
+        'name': 'プライムシューターFRZN',
+        'filename': 'Path_Wst_Shooter_Expert_02.png'
+    },
+    {
+        'name': '.96ガロン爪',
+        'filename': 'Path_Wst_Shooter_Heavy_02.png'
+    },
+    {
+        'name': 'ジェットスイーパーCOBR',
+        'filename': 'Path_Wst_Shooter_Long_02.png'
+    },
+    {
+        'name': 'ホットブラスター艶',
+        'filename': 'Path_Wst_Blaster_Middle_02.png'
+    },
+    {
+        'name': 'RブラスターエリートWNTR',
+        'filename': 'Path_Wst_Blaster_LightLong_02.png'
+    },
+    {
+        'name': 'L3リールガン箔',
+        'filename': 'Path_Wst_Shooter_TripleQuick_02.png'
+    },
+    {
+        'name': 'H3リールガンSNAK',
+        'filename': 'Path_Wst_Shooter_TripleMiddle_02.png'
+    },
+    {
+        'name': 'カーボンローラーANGL',
+        'filename': 'Path_Wst_Roller_Compact_02.png'
+    },
+    {
+        'name': 'ダイナモローラー冥',
+        'filename': 'Path_Wst_Roller_Heavy_02.png'
+    },
+    {
+        'name': 'ワイドローラー惑',
+        'filename': 'Path_Wst_Roller_Wide_02.png'
+    },
+    {
+        'name': 'ホクサイ彗',
+        'filename': 'Path_Wst_Brush_Normal_02.png'
+    },
+    {
+        'name': 'フィンセントBRNZ',
+        'filename': 'Path_Wst_Brush_Heavy_02.png'
+    },
+    {
+        'name': 'スプラチャージャーFRST',
+        'filename': 'Path_Wst_Charger_Normal_02.png'
+    },
+    {
+        'name': 'スプラスコープFRST',
+        'filename': 'Path_Wst_Charger_NormalScope_02.png'
+    },
+    {
+        'name': 'ヒッセンASH',
+        'filename': 'Path_Wst_Slosher_Diffusion_02.png'
+    },
+    {
+        'name': 'モップリン角',
+        'filename': 'Path_Wst_Slosher_Double_02.png'
+    },
+    {
+        'name': 'スプラスピナーPYTN',
+        'filename': 'Path_Wst_Spinner_Quick_02.png'
+    },
+    {
+        'name': 'ハイドラント圧',
+        'filename': 'Path_Wst_Spinner_Hyper_02.png'
+    },
+    {
+        'name': 'スパッタリーOWL',
+        'filename': 'Path_Wst_Maneuver_Short_02.png'
+    },
+    {
+        'name': 'スプラマニューバー耀',
+        'filename': 'Path_Wst_Maneuver_Normal_02.png'
+    },
+    {
+        'name': 'デュアルスイーパー蹄',
+        'filename': 'Path_Wst_Maneuver_Dual_02.png'
+    },
+    {
+        'name': 'キャンピングシェルターCREM',
+        'filename': 'Path_Wst_Shelter_Wide_02.png'
+    },
+    {
+        'name': 'スパイガジェット繚',
+        'filename': 'Path_Wst_Shelter_Compact_02.png'
+    },
+    {
+        'name': 'トライストリンガー燈',
+        'filename': 'Path_Wst_Stringer_Normal_02.png'
+    },
+    {
+        'name': 'LACT-450MILK',
+        'filename': 'Path_Wst_Stringer_Short_02.png'
+    },
+    {
+        'name': 'ジムワイパー封',
+        'filename': 'Path_Wst_Saber_Normal_02.png'
+    },
+    {
+        'name': 'ドライブワイパーRUST',
+        'filename': 'Path_Wst_Saber_Lite_02.png'
     }
 ]
